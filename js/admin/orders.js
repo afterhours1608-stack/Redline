@@ -16,7 +16,7 @@ async function init() {
 
   async function loadOrders() {
     try {
-      const res = await fetchWithAuth('http://localhost:5000/api/orders');
+      const res = await fetchWithAuth('/api/orders');
       if (!res) return;
       allOrdersData = await res.json();
       
@@ -82,7 +82,7 @@ async function init() {
 
   window.updateStatus = async (id, status, reason = null) => {
     try {
-      const res = await fetchWithAuth(`http://localhost:5000/api/orders/${id}`, {
+      const res = await fetchWithAuth(`/api/orders/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status, rejectReason: reason })

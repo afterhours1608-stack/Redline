@@ -13,7 +13,7 @@ async function init() {
 async function fetchLeads() {
   const tbody = document.getElementById('leads-table-body');
   try {
-    const res = await fetchWithAuth('http://localhost:5000/api/users/customers');
+    const res = await fetchWithAuth('/api/users/customers');
     if (!res) return;
     
     allLeads = await res.json();

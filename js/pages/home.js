@@ -20,7 +20,7 @@ export async function initHomePage() {
 
 async function renderSettings() {
   try {
-    const res = await fetch('http://localhost:5000/api/settings');
+    const res = await fetch('/api/settings');
     const data = await res.json();
     
     // Update Hero
@@ -32,7 +32,7 @@ async function renderSettings() {
     if (data.hero_title && heroTitle) heroTitle.innerText = data.hero_title;
     if (data.hero_tagline && heroTagline) heroTagline.innerText = data.hero_tagline;
     if (data.banner_url) {
-      const bannerUrl = data.banner_url.startsWith('http') ? data.banner_url : `http://localhost:5000${data.banner_url}`;
+      const bannerUrl = data.banner_url.startsWith('http') ? data.banner_url : `${data.banner_url}`;
       if (heroBg) heroBg.style.backgroundImage = `url('${bannerUrl}')`;
       else if (heroSection) heroSection.style.backgroundImage = `url('${bannerUrl}')`;
     }

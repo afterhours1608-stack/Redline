@@ -24,7 +24,7 @@ async function init() {
   }
 
   try {
-    const res = await fetchWithAuth('http://localhost:5000/api/dashboard');
+    const res = await fetchWithAuth('/api/dashboard');
     if (!res) return;
     const data = await res.json();
     

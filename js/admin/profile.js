@@ -41,14 +41,14 @@ function setupAvatarUpload() {
     formData.append('image', file);
 
     try {
-      const res = await fetchWithAuth('http://localhost:5000/api/settings/upload', {
+      const res = await fetchWithAuth('/api/settings/upload', {
         method: 'POST',
         body: formData
       });
       const data = await res.json();
       
       if (data.url) {
-        currentAvatarUrl = 'http://localhost:5000' + data.url;
+        currentAvatarUrl = '' + data.url;
         document.getElementById('avatar-preview').src = currentAvatarUrl;
         msg.textContent = 'Gambar berhasil diunggah! Jangan lupa klik Simpan Perubahan.';
         msg.style.color = '#10B981';
@@ -83,7 +83,7 @@ function setupFormSubmit() {
     if (password) payload.password = password;
 
     try {
-      const res = await fetchWithAuth('http://localhost:5000/api/auth/profile', {
+      const res = await fetchWithAuth('/api/auth/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

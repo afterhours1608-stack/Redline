@@ -15,7 +15,7 @@ async function init() {
 
   async function loadProducts() {
     try {
-      const res = await fetch('http://localhost:5000/api/products');
+      const res = await fetch('/api/products');
       allProductsData = await res.json();
       
       if (allProductsData.length === 0) {
@@ -25,7 +25,7 @@ async function init() {
 
       list.innerHTML = allProductsData.map(p => `
         <tr>
-          <td><img src="${p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : 'http://localhost:5000'+p.images[0]) : ''}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" /></td>
+          <td><img src="${p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : ''+p.images[0]) : ''}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" /></td>
           <td><strong>${p.name}</strong></td>
           <td>Rp ${new Intl.NumberFormat('id-ID').format(p.price)}</td>
           <td>
@@ -48,7 +48,7 @@ async function init() {
   window.deleteProduct = async (id) => {
     if (!confirm('Hapus produk ini?')) return;
     try {
-      const res = await fetchWithAuth(`http://localhost:5000/api/products/${id}`, { method: 'DELETE' });
+      const res = await fetchWithAuth(`/api/products/${id}`, { method: 'DELETE' });
       if (res && res.ok) loadProducts();
     } catch (err) {
       alert('Gagal menghapus');
@@ -77,7 +77,7 @@ async function init() {
       document.getElementById(`prod-img-${suffix}`).value = url;
       const preview = document.getElementById(`preview-img-${suffix}`);
       if (url) {
-        preview.src = url.startsWith('http') ? url : `http://localhost:5000${url}`;
+        preview.src = url.startsWith('http') ? url : `${url}`;
         preview.style.display = 'block';
       } else {
         preview.style.display = 'none';
@@ -91,7 +91,7 @@ async function init() {
 
   async function loadCategories() {
     try {
-      const res = await fetch('http://localhost:5000/api/categories');
+      const res = await fetch('/api/categories');
       const categories = await res.json();
       const select = document.getElementById('prod-category');
       
@@ -146,14 +146,14 @@ async function init() {
     formData.append('image', fileInput.files[0]);
 
     try {
-      const res = await fetchWithAuth('http://localhost:5000/api/products/upload', {
+      const res = await fetchWithAuth('/api/products/upload', {
         method: 'POST',
         body: formData
       });
       const data = await res.json();
       if (data.url) {
         hiddenInput.value = data.url;
-        previewImg.src = `http://localhost:5000${data.url}`;
+        previewImg.src = `${data.url}`;
         previewImg.style.display = 'block';
       }
     } catch (err) {
@@ -207,7 +207,7 @@ async function init() {
       return;
     }
 
-    const url = currentEditId ? `http://localhost:5000/api/products/${currentEditId}` : 'http://localhost:5000/api/products';
+    const url = currentEditId ? `/api/products/${currentEditId}` : '/api/products';
     const method = currentEditId ? 'PUT' : 'POST';
 
     try {

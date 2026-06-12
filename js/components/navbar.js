@@ -138,7 +138,7 @@ export function renderNavbar() {
 
 async function fetchNavSettings() {
   try {
-    const res = await fetch('http://localhost:5000/api/settings');
+    const res = await fetch('/api/settings');
     const data = await res.json();
     
     if (data.announcement) {
@@ -153,7 +153,7 @@ async function fetchNavSettings() {
     //   const logo = document.getElementById('nav-logo');
     //   const text = document.getElementById('nav-text');
     //   if (logo) {
-    //     logo.src = data.logo_url.startsWith('http') ? data.logo_url : `http://localhost:5000${data.logo_url}`;
+    //     logo.src = data.logo_url.startsWith('http') ? data.logo_url : `${data.logo_url}`;
     //     logo.style.display = 'block';
     //     if (text) text.style.display = 'none';
     //   }

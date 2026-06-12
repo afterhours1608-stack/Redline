@@ -2,7 +2,7 @@
 // REDLINE — API Products Data
 // ===========================
 
-const API_URL = 'http://localhost:5000/api/products';
+const API_URL = '/api/products';
 
 let cachedProducts = null;
 
@@ -33,9 +33,9 @@ export async function fetchAllProducts() {
         sizes: [...new Set(p.variants.map(v => v.size))],
         colors: [...new Set(p.variants.map(v => v.color))].map(c => ({ name: c, hex: c === 'Hitam' ? '#111' : (c === 'Abu-abu' ? '#666' : '#fff') })),
         stock: p.variants.reduce((acc, v) => acc + v.stock, 0),
-        images: Array.isArray(p.images) ? p.images.filter(img => img).map(img => img.startsWith('http') ? img : `http://localhost:5000${img}`) : [],
-        frontImage: Array.isArray(p.images) && p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : 'http://localhost:5000' + p.images[0]) : '',
-        backImage: Array.isArray(p.images) && p.images[1] ? (p.images[1].startsWith('http') ? p.images[1] : 'http://localhost:5000' + p.images[1]) : (Array.isArray(p.images) && p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : 'http://localhost:5000' + p.images[0]) : ''),
+        images: Array.isArray(p.images) ? p.images.filter(img => img).map(img => img.startsWith('http') ? img : `${img}`) : [],
+        frontImage: Array.isArray(p.images) && p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : '' + p.images[0]) : '',
+        backImage: Array.isArray(p.images) && p.images[1] ? (p.images[1].startsWith('http') ? p.images[1] : '' + p.images[1]) : (Array.isArray(p.images) && p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : '' + p.images[0]) : ''),
         reviews: []
       };
     });

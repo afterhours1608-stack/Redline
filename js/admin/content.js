@@ -8,7 +8,7 @@ async function init() {
   
   // Load data
   try {
-    const res = await fetchWithAuth('http://localhost:5000/api/settings');
+    const res = await fetchWithAuth('/api/settings');
     if (!res) return;
     const data = await res.json();
     
@@ -18,8 +18,8 @@ async function init() {
       }
     });
     
-    if (data.logo_url) document.getElementById('logo_preview').src = data.logo_url.startsWith('http') ? data.logo_url : `http://localhost:5000${data.logo_url}`;
-    if (data.banner_url) document.getElementById('banner_preview').src = data.banner_url.startsWith('http') ? data.banner_url : `http://localhost:5000${data.banner_url}`;
+    if (data.logo_url) document.getElementById('logo_preview').src = data.logo_url.startsWith('http') ? data.logo_url : `${data.logo_url}`;
+    if (data.banner_url) document.getElementById('banner_preview').src = data.banner_url.startsWith('http') ? data.banner_url : `${data.banner_url}`;
 
     if (data.flashSale) {
       document.getElementById('fs_active').checked = data.flashSale.isActive;
@@ -43,14 +43,14 @@ async function init() {
     const formData = new FormData();
     formData.append('image', fileInput.files[0]);
 
-    const res = await fetchWithAuth('http://localhost:5000/api/settings/upload', {
+    const res = await fetchWithAuth('/api/settings/upload', {
       method: 'POST',
       body: formData
     });
     const data = await res.json();
     if (data.url) {
       document.getElementById(hiddenId).value = data.url;
-      document.getElementById(previewId).src = `http://localhost:5000${data.url}`;
+      document.getElementById(previewId).src = `${data.url}`;
     }
   }
 
@@ -76,7 +76,7 @@ async function init() {
     };
 
     try {
-      const res = await fetchWithAuth('http://localhost:5000/api/settings', {
+      const res = await fetchWithAuth('/api/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ settings, flashSale })
