@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akun Saya — REDLINE Truck Apparel</title>
+  <meta name="description" content="Kelola profil, alamat, dan lacak pesanan Anda di REDLINE.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚛%3C/text%3E%3C/svg%3E">
+  
+  
+  
+  
+  
+  <style>
+    /* Smooth Fade Transition */
+    html { background-color: #f5f5f5; }
+    body { opacity: 0.3; transition: opacity 0.5s ease-in-out; }
+    body.is-ready { opacity: 1; }
+    body.is-animating-out { opacity: 0.3; }
+  </style>
+</head>
+<body>
+  
+  <div class="page-wrapper">
+    <div class="page-content page-enter">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">/</span>
+          <span class="current">Akun Saya</span>
+        </nav>
+        
+        <!-- Guest View -->
+        <div id="guest-view" class="guest-layout" style="display: none;">
+          <div class="guest-card">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="guest-icon">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <h1 class="guest-title">Ayo gabung di komunitas kami sekarang juga</h1>
+            <p class="guest-subtitle">Kelola pesanan, lacak pengiriman, dan nikmati penawaran eksklusif khusus anggota REDLINE.</p>
+            <div class="guest-actions">
+              <button class="btn btn--primary" id="btn-show-register">Daftar</button>
+              <button class="btn btn--outline" id="btn-show-login">Login</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auth View -->
+        <div id="auth-view" class="account-layout" style="display: none;">
+          <!-- Sidebar -->
+          <aside class="account-sidebar">
+            <div class="account-sidebar__header">
+              <div class="account-sidebar__name" id="display-user-name">Budi Santoso</div>
+              <div class="account-sidebar__email" id="display-user-email">budi.santoso@example.com</div>
+            </div>
+            <nav class="account-menu">
+              <button class="account-menu__item active" data-target="section-dashboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Dashboard
+              </button>
+              <button class="account-menu__item" data-target="section-orders">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                Riwayat Pesanan
+              </button>
+              <button class="account-menu__item" data-target="section-address">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Alamat Tersimpan
+              </button>
+              <button class="account-menu__item" data-target="section-profile">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Detail Profil
+              </button>
+              <button class="account-menu__item account-menu__item--danger" id="logout-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Keluar
+              </button>
+            </nav>
+          </aside>
+
+          <!-- Content -->
+          <div class="account-content">
+            
+            <!-- Dashboard -->
+            <section id="section-dashboard" class="account-section active">
+              <h2 class="account-section__title">Dashboard</h2>
+              <p style="margin-bottom: var(--space-6);">Halo <strong id="welcome-name">Budi</strong>! Dari dashboard akun Anda, Anda dapat melihat aktivitas pesanan terbaru dan mengatur informasi profil Anda.</p>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8);">
+                <div style="background: var(--color-surface); padding: var(--space-5); border-radius: var(--radius-md); text-align: center;">
+                  <div style="font-size: var(--font-size-3xl); font-family: var(--font-display); font-weight: bold;">3</div>
+                  <div style="color: var(--color-text-secondary); font-size: var(--font-size-sm); text-transform: uppercase;">Total Pesanan</div>
+                </div>
+                <div style="background: var(--color-surface); padding: var(--space-5); border-radius: var(--radius-md); text-align: center;">
+                  <div style="font-size: var(--font-size-3xl); font-family: var(--font-display); font-weight: bold;">1</div>
+                  <div style="color: var(--color-text-secondary); font-size: var(--font-size-sm); text-transform: uppercase;">Pesanan Aktif</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Orders -->
+            <section id="section-orders" class="account-section">
+              <h2 class="account-section__title">Riwayat Pesanan</h2>
+              <div id="orders-container"></div>
+            </section>
+
+            <!-- Addresses -->
+            <section id="section-address" class="account-section">
+              <h2 class="account-section__title">Alamat Tersimpan</h2>
+              <div id="address-container"></div>
+            </section>
+
+            <!-- Profile -->
+            <section id="section-profile" class="account-section">
+              <h2 class="account-section__title">Detail Profil</h2>
+              
+              <form id="profile-form" class="profile-form" style="margin-bottom: var(--space-10);">
+                <div class="input-group">
+                  <label>Nama Lengkap</label>
+                  <input type="text" id="input-profile-name" class="input" value="" required />
+                </div>
+                <div class="input-group">
+                  <label>Email</label>
+                  <input type="email" id="input-profile-email" class="input" value="" required />
+                </div>
+                <div class="input-group">
+                  <label>Nomor Telepon</label>
+                  <input type="tel" id="input-profile-phone" class="input" value="081234567890" />
+                </div>
+                <button type="submit" class="btn btn--primary">Simpan Perubahan</button>
+              </form>
+
+              <h3 style="font-family: var(--font-display); text-transform: uppercase; margin-bottom: var(--space-4);">Ubah Password</h3>
+              <form id="password-form" class="profile-form">
+                <div class="input-group">
+                  <label>Password Saat Ini</label>
+                  <input type="password" class="input" required />
+                </div>
+                <div class="input-group">
+                  <label>Password Baru</label>
+                  <input type="password" class="input" id="new-password" required />
+                </div>
+                <div class="input-group">
+                  <label>Konfirmasi Password Baru</label>
+                  <input type="password" class="input" id="confirm-password" required />
+                </div>
+                <button type="submit" class="btn btn--outline">Ubah Password</button>
+              </form>
+            </section>
+
+          </div>
+        </div>
+        
+        <!-- Auth Modal -->
+        <div class="auth-modal-overlay" id="auth-modal">
+          <div class="auth-modal-content">
+            <button class="auth-modal-close" id="auth-modal-close">&times;</button>
+            <h2 class="auth-modal-title" id="auth-modal-title">Daftar Akun</h2>
+            <form id="auth-form" class="profile-form">
+              <div class="input-group" id="group-name">
+                <label>Nama Lengkap</label>
+                <input type="text" id="auth-name" class="input" />
+              </div>
+              <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="auth-email" class="input" required />
+              </div>
+              <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="auth-password" class="input" required />
+              </div>
+              <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: var(--space-2);" id="auth-submit-btn">Daftar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import './js/main.js';
+    import './css/pages/account.css';
+    import { initAccountPage } from './js/pages/account.js';
+    document.addEventListener('DOMContentLoaded', initAccountPage);
+  </script>
+</body>
+</html>

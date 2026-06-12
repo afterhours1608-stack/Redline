@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hubungi Kami — REDLINE Truck Apparel</title>
+  <meta name="description" content="Hubungi REDLINE Truck Apparel. Kami siap membantu Anda terkait pemesanan, produk, atau kerjasama.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚛%3C/text%3E%3C/svg%3E">
+  
+  
+  
+  
+  
+  
+  <style>
+    /* Smooth Fade Transition */
+    html { background-color: #f5f5f5; }
+    body { opacity: 0.3; transition: opacity 0.5s ease-in-out; }
+    body.is-ready { opacity: 1; }
+    body.is-animating-out { opacity: 0.3; }
+  </style>
+</head>
+<body>
+  
+  <div class="page-wrapper">
+    <div class="page-content page-enter">
+      <div class="container" style="padding-top: var(--space-12); padding-bottom: var(--space-20);">
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">/</span>
+          <span class="current">Hubungi Kami</span>
+        </nav>
+        
+        <h1 style="text-align: center; margin-bottom: var(--space-4);">Hubungi Kami</h1>
+        <p style="text-align: center; color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">Punya pertanyaan mengenai pesanan, ukuran, atau ingin berkolaborasi? Jangan ragu untuk menghubungi kami melalui form di bawah ini atau channel resmi kami.</p>
+
+        <div class="contact-layout">
+          <div class="contact-info">
+            <div class="contact-card">
+              <div class="contact-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              </div>
+              <div>
+                <div class="contact-card__title">WhatsApp / Telepon</div>
+                <div class="contact-card__desc">Senin - Jumat, 09:00 - 17:00 WIB<br>Sabtu, 09:00 - 15:00 WIB</div>
+                <a href="https://wa.me/6281234567890" target="_blank" class="contact-card__link">+62 812-3456-7890</a>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </div>
+              <div>
+                <div class="contact-card__title">Email</div>
+                <div class="contact-card__desc">Untuk pertanyaan umum, return, atau kerjasama. Kami membalas dalam 1x24 jam.</div>
+                <a href="mailto:info@redline.co.id" class="contact-card__link">info@redline.co.id</a>
+              </div>
+            </div>
+
+            <div class="contact-card">
+              <div class="contact-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </div>
+              <div>
+                <div class="contact-card__title">Markas</div>
+                <div class="contact-card__desc">Headquarters kami (hanya gudang/kantor, bukan toko fisik).</div>
+                <div style="font-size: var(--font-size-sm);">Kebayoran Baru, Jakarta Selatan<br>DKI Jakarta, 12110</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form">
+            <h2 style="font-family: var(--font-display); text-transform: uppercase; margin-bottom: var(--space-6);">Kirim Pesan</h2>
+            <form onsubmit="event.preventDefault(); alert('Pesan Anda berhasil dikirim. Kami akan membalas secepatnya.'); this.reset();">
+              <div class="input-group">
+                <label>Nama Lengkap *</label>
+                <input type="text" class="input" required />
+              </div>
+              <div class="input-group">
+                <label>Email *</label>
+                <input type="email" class="input" required />
+              </div>
+              <div class="input-group">
+                <label>Nomor Pesanan (opsional)</label>
+                <input type="text" class="input" placeholder="RL-XXXXXX" />
+              </div>
+              <div class="input-group">
+                <label>Pesan *</label>
+                <textarea class="input" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary btn--full btn--lg">Kirim Pesan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import './js/main.js';
+  </script>
+</body>
+</html>

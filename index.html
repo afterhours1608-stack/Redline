@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>REDLINE Truck Apparel — Built for the Road. Worn with Pride.</title>
+  <meta name="description" content="Toko apparel premium untuk komunitas pengemudi truk Mercedes-Benz, mekanik, dan penggemar otomotif berat di Indonesia. Kaos, hoodie, topi, dan aksesori.">
+  <meta property="og:title" content="REDLINE Truck Apparel">
+  <meta property="og:description" content="Built for the Road. Worn with Pride. Apparel premium untuk komunitas truk Mercedes-Benz Indonesia.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚛%3C/text%3E%3C/svg%3E">
+  
+  
+  
+  
+  
+  <style>
+    /* Smooth Fade Transition */
+    html { background-color: #f5f5f5; }
+    body { opacity: 0.3; transition: opacity 0.5s ease-in-out; }
+    body.is-ready { opacity: 1; }
+    body.is-animating-out { opacity: 0.3; }
+  </style>
+</head>
+<body>
+  
+  <div class="page-wrapper">
+    <div class="page-content page-enter">
+
+      <!-- Hero Section -->
+      <section class="hero" id="hero">
+        <div class="hero__bg" style="background-image: url('https://imgcdn.oto.com/large/gallery/exterior/127/2172/mercedes-benz-actros-front-angle-low-view-133263.jpg');"></div>
+        <div class="hero__overlay"></div>
+        <div class="hero__content">
+          <p class="hero__tagline">Mercedes-Benz Truck Apparel Indonesia</p>
+          <h1 class="hero__title">Built for<br>the Road.<br>Worn with Pride.</h1>
+          <p class="hero__subtitle">Apparel premium untuk pengemudi truk, mekanik, dan penggemar otomotif berat</p>
+          <div class="hero__cta">
+            <a href="/katalog.html" class="btn btn--lg">Belanja Sekarang</a>
+          </div>
+        </div>
+        <div class="hero__scroll">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="7 13 12 18 17 13"/>
+            <polyline points="7 6 12 11 17 6"/>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Featured Products -->
+      <section class="featured-section section">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Koleksi Unggulan</h2>
+              <p class="section-subtitle">Produk terlaris dan terbaru dari REDLINE</p>
+            </div>
+            <a href="/katalog.html" class="view-all hide-mobile">Lihat Semua →</a>
+          </div>
+          <div class="grid grid--products stagger-children" id="featured-grid">
+            <!-- Populated by JS -->
+          </div>
+          <div class="hide-desktop" style="text-align: center; margin-top: var(--space-8);">
+            <a href="/katalog.html" class="btn btn--outline">Lihat Semua Produk</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Categories -->
+      <section class="categories-section section">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Belanja per Kategori</h2>
+            <p class="section-subtitle">Temukan koleksi yang sesuai dengan gaya kamu</p>
+          </div>
+          <div class="category-grid" id="category-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Brand Story -->
+      <section class="brand-story section">
+        <div class="container">
+          <div class="brand-story__grid">
+            <div class="animate-on-scroll">
+              <img src="https://imgcdn.oto.com/large/gallery/exterior/127/2172/mercedes-benz-actros-front-angle-low-view-133263.jpg" alt="Mercedes-Benz Truck di jalan" class="brand-story__image" loading="lazy" />
+            </div>
+            <div class="brand-story__content animate-on-scroll" data-delay="2">
+              <div class="brand-story__label">Tentang Kami</div>
+              <h2 class="brand-story__title">Gaya Sopir.<br>Jiwa Actros.</h2>
+              <p class="brand-story__text">
+                REDLINE lahir dari kecintaan terhadap dunia truk dan pengemudi profesional Indonesia. 
+                Kami percaya bahwa setiap pengemudi, mekanik, dan penggemar truk Mercedes-Benz layak 
+                tampil dengan bangga — di jalan, di pool, maupun di rumah.
+              </p>
+              <p class="brand-story__text">
+                Setiap desain kami terinspirasi dari kekuatan dan keandalan truk Mercedes-Benz yang telah 
+                menemani jutaan kilometer perjalanan di jalanan Indonesia.
+              </p>
+              <a href="/tentang.html" class="btn btn--outline">Tentang Kami</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Flash Sale -->
+      <section class="flash-sale section--sm" id="flash-sale-section">
+        <div class="container">
+          <div class="flash-sale__label">⚡ Flash Sale</div>
+          <h2 class="flash-sale__title">Diskon Hingga 25%</h2>
+          <div class="flash-sale__countdown" id="flash-countdown">
+            <!-- Populated by JS -->
+          </div>
+          <a href="/katalog.html?sale=true" class="btn btn--lg" style="background: white; color: #111; border-color: white;">Lihat Produk Sale</a>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="testimonials-section section">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Kata Mereka</h2>
+            <p class="section-subtitle">Apa kata pelanggan REDLINE tentang produk kami</p>
+          </div>
+          <div class="testimonials-grid" id="testimonials-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section class="newsletter-section section">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Gabung Komunitas</h2>
+            <p class="section-subtitle">Dapatkan info produk terbaru, promo eksklusif, dan konten komunitas truk langsung di inbox kamu</p>
+          </div>
+          <form class="newsletter__form" onsubmit="event.preventDefault(); this.querySelector('input').value = ''; alert('Terima kasih! Email kamu sudah terdaftar.');">
+            <input type="email" class="input newsletter__input" placeholder="Masukkan email kamu" required />
+            <button type="submit" class="btn btn--primary">Daftar</button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import './js/main.js';
+    import './css/pages/home.css';
+    import { initHomePage } from './js/pages/home.js';
+    document.addEventListener('DOMContentLoaded', initHomePage);
+  </script>
+</body>
+</html>

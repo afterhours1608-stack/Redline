@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katalog Produk — REDLINE Truck Apparel</title>
+  <meta name="description" content="Koleksi lengkap kaos, hoodie, topi, dan aksesori bertema truk Mercedes-Benz. Temukan gaya trucker kamu!">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚛%3C/text%3E%3C/svg%3E">
+  
+  
+  
+  
+  
+  <style>
+    /* Smooth Fade Transition */
+    html { background-color: #f5f5f5; }
+    body { opacity: 0.3; transition: opacity 0.5s ease-in-out; }
+    body.is-ready { opacity: 1; }
+    body.is-animating-out { opacity: 0.3; }
+  </style>
+</head>
+<body>
+  
+  <div class="page-wrapper">
+    <div class="page-content page-enter">
+      <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">/</span>
+          <span class="current" id="catalog-title">Semua Produk</span>
+        </nav>
+
+        <!-- Catalog Layout -->
+        <div class="catalog-layout">
+          <!-- Sidebar Filters -->
+          <aside class="catalog-sidebar" id="catalog-filters">
+            <!-- Populated by JS -->
+          </aside>
+
+          <!-- Main Content -->
+          <div class="catalog-main">
+            <!-- Header with sort -->
+            <div class="catalog-header">
+              <div class="catalog-header__left">
+                <button class="btn btn--outline btn--sm mobile-filter-btn" id="mobile-filter-toggle">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+                    <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+                    <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>
+                    <line x1="17" y1="16" x2="23" y2="16"/>
+                  </svg>
+                  Filter
+                </button>
+                <span class="catalog-count" id="catalog-count">Menampilkan 12 produk</span>
+              </div>
+              <div class="catalog-sort">
+                <label for="catalog-sort">Urutkan:</label>
+                <select id="catalog-sort" class="input" style="min-height: 40px; padding: var(--space-2) var(--space-8) var(--space-2) var(--space-3);">
+                  <option value="newest">Terbaru</option>
+                  <option value="popular">Terlaris</option>
+                  <option value="price-asc">Harga: Rendah ke Tinggi</option>
+                  <option value="price-desc">Harga: Tinggi ke Rendah</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Active Filters -->
+            <div id="active-filters" class="active-filters" style="display: none;"></div>
+
+            <!-- Products Grid -->
+            <div class="grid grid--products" id="catalog-grid">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import './js/main.js';
+    import './css/pages/catalog.css';
+    import { initCatalogPage } from './js/pages/catalog.js';
+    document.addEventListener('DOMContentLoaded', initCatalogPage);
+  </script>
+</body>
+</html>

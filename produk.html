@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Produk — REDLINE Truck Apparel</title>
+  <meta name="description" content="Detail produk apparel Mercedes-Benz Truck. Lihat ukuran, warna, harga, dan ulasan.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚛%3C/text%3E%3C/svg%3E">
+  
+  
+  
+  
+  
+  <style>
+    /* Smooth Fade Transition */
+    html { background-color: #f5f5f5; }
+    body { opacity: 0.3; transition: opacity 0.5s ease-in-out; }
+    body.is-ready { opacity: 1; }
+    body.is-animating-out { opacity: 0.3; }
+  </style>
+</head>
+<body>
+  
+  <div class="page-wrapper">
+    <div class="page-content page-enter">
+      <div class="container">
+        <nav class="breadcrumb" id="pdp-breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">/</span>
+          <span class="current">Produk</span>
+        </nav>
+        <div id="pdp-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import './js/main.js';
+    import './css/pages/product.css';
+    import { initProductPage } from './js/pages/product.js';
+    document.addEventListener('DOMContentLoaded', initProductPage);
+  </script>
+</body>
+</html>
