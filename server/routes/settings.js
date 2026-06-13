@@ -1,5 +1,5 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../prismaClient.js';
 import { requireAdmin } from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
