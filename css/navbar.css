@@ -56,7 +56,6 @@ body.is-home .navbar:not(.navbar--scrolled) {
 }
 
 body.is-home .navbar:not(.navbar--scrolled) .navbar__logo-text,
-body.is-home .navbar:not(.navbar--scrolled) .navbar__logo-sub,
 body.is-home .navbar:not(.navbar--scrolled) .navbar__link,
 body.is-home .navbar:not(.navbar--scrolled) .navbar__action-btn,
 body.is-home .navbar:not(.navbar--scrolled) .navbar__menu-toggle {
@@ -104,15 +103,6 @@ body.is-home .navbar--scrolled {
   font-weight: var(--font-weight-extrabold);
   letter-spacing: var(--letter-spacing-widest);
   color: var(--color-text-primary);
-  text-transform: uppercase;
-}
-
-.navbar__logo-sub {
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.25em;
-  color: var(--color-text-secondary);
   text-transform: uppercase;
 }
 

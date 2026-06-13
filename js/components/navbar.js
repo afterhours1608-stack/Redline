@@ -23,9 +23,11 @@ export function renderNavbar() {
         </button>
 
         <!-- Logo -->
-        <a href="/" class="navbar__logo">
+        <a href="/" class="navbar__logo" style="display: flex; flex-direction: row; align-items: center; gap: 6px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+          </svg>
           <span class="navbar__logo-text" id="nav-text"><span style="color: var(--color-danger);">RED</span>LINE</span>
-          <span class="navbar__logo-sub">TRUCK APPAREL</span>
         </a>
 
         <!-- Desktop Navigation -->
@@ -79,9 +81,11 @@ export function renderNavbar() {
     <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
     <div class="mobile-menu" id="mobile-menu">
       <div class="mobile-menu__header">
-        <div style="display: flex; flex-direction: column; line-height: 1;">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 6px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+          </svg>
           <span class="navbar__logo-text" style="font-size: 1.25rem;"><span style="color: var(--color-danger);">RED</span>LINE</span>
-          <span class="navbar__logo-sub" style="font-size: 0.45rem;">TRUCK APPAREL</span>
         </div>
         <button class="mobile-menu__close" id="mobile-menu-close" aria-label="Tutup menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
