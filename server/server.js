@@ -1,9 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
 import authRoutes from './routes/auth.js';
 import settingsRoutes from './routes/settings.js';
 import productsRoutes from './routes/products.js';
@@ -12,15 +9,11 @@ import ordersRoutes from './routes/orders.js';
 import dashboardRoutes from './routes/dashboard.js';
 import usersRoutes from './routes/users.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const prisma = new PrismaClient();
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes placeholder
 app.get('/api/health', (req, res) => {
