@@ -316,3 +316,56 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .catalog-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .catalog-header__left {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .catalog-sort {
+    width: 100%;
+  }
+
+  .catalog-sort select {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .catalog-sort label {
+    display: none;
+  }
+
+  .catalog-count {
+    font-size: var(--font-size-xs);
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    margin-top: var(--space-8);
+  }
+
+  .pagination__btn {
+    width: 36px;
+    height: 36px;
+    font-size: var(--font-size-xs);
+  }
+
+  /* Mobile filter overlay close button */
+  .catalog-sidebar.mobile-open {
+    padding-top: var(--space-16);
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-layout {
+    padding: var(--space-4) 0 var(--space-10);
+  }
+}

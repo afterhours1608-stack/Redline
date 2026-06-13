@@ -149,5 +149,19 @@
     --font-size-3xl: 1.5rem;
     --container-padding: var(--space-4);
     --section-padding: var(--space-10);
+    --grid-gap: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-hero: 2rem;
+    --font-size-6xl: 1.75rem;
+    --font-size-5xl: 1.5rem;
+    --font-size-4xl: 1.35rem;
+    --font-size-3xl: 1.25rem;
+    --font-size-2xl: 1.125rem;
+    --container-padding: var(--space-3);
+    --section-padding: var(--space-8);
   }
 }

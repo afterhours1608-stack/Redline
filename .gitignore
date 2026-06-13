@@ -6,3 +6,7 @@ dev.db-journal
 uploads/
 .DS_Store
 dist/
+
+*.ps1
+out/
+temp-products.json

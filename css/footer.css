@@ -171,3 +171,43 @@
   font-size: var(--font-size-xs);
   color: var(--color-dark-text-secondary);
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .site-footer {
+    margin-top: var(--space-10);
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-6);
+  }
+
+  .footer__grid {
+    gap: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .footer__desc {
+    max-width: 100%;
+    font-size: var(--font-size-xs);
+  }
+
+  .footer__heading {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__links li a,
+  .footer__links li span {
+    font-size: var(--font-size-xs);
+  }
+
+  .footer__bottom-info {
+    gap: var(--space-4);
+    padding: var(--space-6) 0;
+    flex-direction: column;
+  }
+
+  .footer__copyright {
+    padding-top: var(--space-4);
+    font-size: 0.65rem;
+  }
+}

@@ -411,3 +411,161 @@
     flex-direction: column;
   }
 }
+
+/* ── Mobile (≤768px) ── */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero {
+    height: 75vh;
+    min-height: 400px;
+    max-height: 700px;
+  }
+
+  .hero__tagline {
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.15em;
+    margin-bottom: var(--space-3);
+  }
+
+  .hero__subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-6);
+  }
+
+  .hero__cta .btn {
+    padding: var(--space-3) var(--space-8);
+    font-size: var(--font-size-sm);
+  }
+
+  .hero__scroll {
+    bottom: var(--space-4);
+  }
+
+  /* Featured */
+  .featured-section {
+    padding: var(--space-10) 0;
+  }
+
+  .featured-section .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  /* Categories */
+  .categories-section {
+    padding: var(--space-10) 0;
+  }
+
+  .category-card {
+    aspect-ratio: 3 / 2;
+  }
+
+  .category-card__name {
+    font-size: var(--font-size-md);
+  }
+
+  .category-card__content {
+    padding: var(--space-3);
+  }
+
+  /* Brand Story */
+  .brand-story {
+    padding: var(--space-10) 0;
+  }
+
+  .brand-story__content {
+    max-width: 100%;
+  }
+
+  .brand-story__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .brand-story__text {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-4);
+  }
+
+  /* Flash Sale */
+  .flash-sale {
+    padding: var(--space-8) 0;
+  }
+
+  .flash-sale__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .flash-sale__countdown {
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .countdown-item {
+    min-width: 48px;
+  }
+
+  .countdown-item__value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .countdown-separator {
+    font-size: var(--font-size-xl);
+  }
+
+  /* Testimonials */
+  .testimonials-section {
+    padding: var(--space-10) 0;
+  }
+
+  .testimonial-card {
+    padding: var(--space-4);
+  }
+
+  /* Newsletter */
+  .newsletter-section {
+    padding: var(--space-10) 0;
+  }
+}
+
+/* ── Small mobile (≤480px) ── */
+@media (max-width: 480px) {
+  .hero {
+    height: 70vh;
+    min-height: 360px;
+  }
+
+  .hero__content {
+    padding: var(--space-4);
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .category-card {
+    aspect-ratio: 16 / 9;
+  }
+
+  .flash-sale__countdown {
+    gap: var(--space-1);
+  }
+
+  .countdown-item {
+    min-width: 40px;
+  }
+
+  .countdown-item__value {
+    font-size: var(--font-size-xl);
+  }
+
+  .countdown-item__label {
+    font-size: 0.625rem;
+  }
+
+  .countdown-separator {
+    font-size: var(--font-size-lg);
+  }
+}

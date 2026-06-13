@@ -239,3 +239,62 @@
   margin: var(--space-6) auto;
   display: inline-block;
 }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .checkout-layout {
+    gap: var(--space-6);
+    padding: var(--space-2) 0 var(--space-10);
+  }
+
+  .checkout-steps {
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+  }
+
+  .checkout-step {
+    font-size: var(--font-size-xs);
+    gap: var(--space-1);
+  }
+
+  .checkout-step__num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.625rem;
+  }
+
+  .checkout-step__separator {
+    width: 20px;
+  }
+
+  .checkout-section__title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .courier-option {
+    padding: var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .checkout-success {
+    padding: var(--space-10) var(--space-4);
+  }
+
+  .checkout-success__order-id {
+    font-size: var(--font-size-lg);
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-steps span:not(.checkout-step__num) {
+    display: none;
+  }
+
+  .payment-options {
+    grid-template-columns: 1fr;
+  }
+}
