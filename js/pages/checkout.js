@@ -259,7 +259,7 @@ function renderStep2() {
       </div>
     </div>
 
-    <div style="display: flex; gap: var(--space-3);">
+    <div class="checkout-main-actions" style="display: flex; gap: var(--space-3);">
       <button class="btn btn--outline btn--lg" id="step2-back" style="flex: 0 0 auto;">← Kembali</button>
       <button class="btn btn--primary btn--lg" id="step2-next" style="flex: 1;">Review Pesanan</button>
     </div>
@@ -319,7 +319,7 @@ function renderStep3() {
       </div>
     </div>
 
-    <div style="display: flex; gap: var(--space-3);">
+    <div class="checkout-main-actions" style="display: flex; gap: var(--space-3);">
       <button class="btn btn--outline btn--lg" id="step3-back" style="flex: 0 0 auto;">← Kembali</button>
       <button class="btn btn--primary btn--lg" id="place-order" style="flex: 1;">Bayar Sekarang — ${formatRupiah(total)}</button>
     </div>

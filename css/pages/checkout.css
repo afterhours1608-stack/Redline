@@ -286,6 +286,14 @@
   .checkout-success__order-id {
     font-size: var(--font-size-lg);
     padding: var(--space-3) var(--space-4);
+    word-break: break-all;
+  }
+
+  /* Prevent button overflows on small screens */
+  .btn {
+    white-space: normal;
+    height: auto;
+    line-height: 1.2;
   }
 }
 
@@ -294,7 +302,21 @@
     display: none;
   }
 
+  .checkout-step__separator {
+    width: 15px;
+  }
+
   .payment-options {
     grid-template-columns: 1fr;
+  }
+
+  /* Stack checkout buttons vertically if they don't fit */
+  .checkout-main-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .checkout-main-actions .btn {
+    width: 100%;
+    margin-bottom: var(--space-2);
   }
 }
