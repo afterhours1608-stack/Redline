@@ -29,8 +29,14 @@ async function renderSettings() {
     const heroSection = document.querySelector('.hero');
     const heroBg = document.querySelector('.hero__bg');
     
-    if (data.hero_title && heroTitle) heroTitle.innerText = data.hero_title;
-    if (data.hero_tagline && heroTagline) heroTagline.innerText = data.hero_tagline;
+    if (data.hero_title && heroTitle) {
+      // Intentionally not overwriting to prevent text flashing bug
+      // heroTitle.innerText = data.hero_title;
+    }
+    if (data.hero_tagline && heroTagline) {
+      // Intentionally not overwriting to prevent text flashing bug
+      // heroTagline.innerText = data.hero_tagline;
+    }
     if (data.banner_url) {
       const bannerUrl = data.banner_url.startsWith('http') ? data.banner_url : `${data.banner_url}`;
       if (heroBg) heroBg.style.backgroundImage = `url('${bannerUrl}')`;
