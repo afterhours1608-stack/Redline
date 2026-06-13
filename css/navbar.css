@@ -66,10 +66,6 @@ body.is-home .navbar:not(.navbar--scrolled) .navbar__link::after {
   background-color: #ffffff;
 }
 
-body.is-home .navbar:not(.navbar--scrolled) .navbar__logo-img {
-  filter: brightness(0) invert(1); /* Turns black logo to white */
-}
-
 body.is-home .navbar--scrolled {
   position: fixed;
   top: 0;
