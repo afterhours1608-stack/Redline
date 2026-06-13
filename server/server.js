@@ -9,7 +9,7 @@ import ordersRoutes from './routes/orders.js';
 import dashboardRoutes from './routes/dashboard.js';
 import usersRoutes from './routes/users.js';
 
-// const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 const app = express();
 
 app.use(cors());
@@ -28,7 +28,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', usersRoutes);
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
