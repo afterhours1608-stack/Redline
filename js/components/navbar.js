@@ -8,8 +8,7 @@ export function renderNavbar() {
   const nav = document.createElement('div');
   nav.id = 'site-header';
   nav.innerHTML = `
-    <div class="announcement-bar" id="announcement-bar">
-      Memuat...
+    <div class="announcement-bar" id="announcement-bar" style="display: none;">
     </div>
     <!-- Main Navigation -->
     <header class="navbar" id="navbar">
@@ -131,6 +130,11 @@ export function renderNavbar() {
   `;
 
   document.body.prepend(nav);
+  
+  if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+    document.body.classList.add('is-home');
+  }
+
   initNavbarEvents();
   initCartBadge();
   fetchNavSettings();
