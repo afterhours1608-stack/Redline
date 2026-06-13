@@ -126,19 +126,25 @@ async function init() {
           <strong>Pengiriman</strong><br>
           ${o.shippingAddress}, ${o.shippingCity}<br>
           ${o.shippingProvince}, ${o.shippingZip}<br>
-          Kurir: ${o.courier}
+          Kurir: <strong>${o.courier.toUpperCase()}</strong>
         </div>
       </div>
       <div>
         <strong>Item Pesanan</strong>
         <table class="admin-table" style="margin-top: 8px;">
           <thead>
-            <tr><th>Produk</th><th>Harga</th><th>Qty</th><th>Subtotal</th></tr>
+            <tr><th style="width: 60px;">Foto</th><th>Produk</th><th>Harga</th><th>Qty</th><th>Subtotal</th></tr>
           </thead>
           <tbody>
             ${o.items.map(i => `
               <tr>
-                <td>${i.name} (${i.color}, ${i.size})</td>
+                <td>
+                  ${i.image ? `<img src="${i.image}" alt="${i.name}" style="width: 48px; height: 60px; object-fit: cover; border-radius: 4px; background: #f3f4f6;" />` : `<div style="width: 48px; height: 60px; background: #e5e7eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af;">No Img</div>`}
+                </td>
+                <td>
+                  <div style="font-weight: 500;">${i.name}</div>
+                  <div style="font-size: 0.8rem; color: #6b7280;">Warna: ${i.color} | Ukuran: ${i.size}</div>
+                </td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(i.price)}</td>
                 <td>${i.quantity}</td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(i.price * i.quantity)}</td>
@@ -147,14 +153,93 @@ async function init() {
           </tbody>
         </table>
       </div>
-      <div style="margin-top: 16px; text-align: right;">
-        <strong>Total Bayar: Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</strong>
+      <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn btn--primary" style="background: #4F46E5; display: flex; align-items: center; gap: 8px;" onclick="printReceipt('${o.id}')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Cetak Resi Packing
+        </button>
+        <div style="text-align: right;">
+          <strong>Total Bayar: Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</strong>
+        </div>
       </div>
       ${o.status === 'rejected' ? `<div style="margin-top: 16px; color: #EF4444; background: #FEE2E2; padding: 12px; border-radius: 8px;"><strong>Alasan Ditolak:</strong> ${o.rejectReason || '-'}</div>` : ''}
     `;
 
     document.getElementById('detail-content').innerHTML = content;
     detailModal.style.display = 'flex';
+  };
+
+  window.printReceipt = (id) => {
+    const o = allOrdersData.find(order => order.id === id);
+    if (!o) return;
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Resi Pengiriman - ${o.orderNumber}</title>
+          <style>
+            body { font-family: sans-serif; line-height: 1.5; padding: 20px; color: #000; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .flex { display: flex; justify-content: space-between; }
+            .box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+            th { background: #f0f0f0; }
+            .print-btn { display: block; width: 100%; padding: 10px; background: #000; color: #fff; text-align: center; text-decoration: none; font-weight: bold; margin-bottom: 20px; cursor: pointer; border: none; }
+            @media print { .print-btn { display: none; } body { padding: 0; } }
+          </style>
+        </head>
+        <body>
+          <button class="print-btn" onclick="window.print()">CETAK SEKARANG</button>
+          <div class="header">
+            <h1 style="margin: 0;">REDLINE TRUCK APPAREL</h1>
+            <p style="margin: 5px 0 0 0;">RESI PENGIRIMAN (PACKING SLIP)</p>
+          </div>
+          
+          <div class="flex">
+            <div style="flex: 1;">
+              <strong>Order ID:</strong> ${o.orderNumber}<br>
+              <strong>Tanggal:</strong> ${new Date(o.createdAt).toLocaleDateString('id-ID')}<br>
+              <strong>Kurir:</strong> ${o.courier.toUpperCase()}
+            </div>
+          </div>
+          
+          <div class="box" style="margin-top: 20px;">
+            <h3>Penerima:</h3>
+            <div style="font-size: 1.2rem; font-weight: bold;">${o.customerName}</div>
+            <div>${o.customerPhone}</div>
+            <div style="margin-top: 10px;">
+              ${o.shippingAddress}<br>
+              ${o.shippingCity}, ${o.shippingProvince}<br>
+              Kode Pos: ${o.shippingZip}
+            </div>
+          </div>
+          
+          <h3>Daftar Barang (Untuk Packing):</h3>
+          <table>
+            <thead>
+              <tr><th>Produk</th><th>Varian</th><th>Qty</th></tr>
+            </thead>
+            <tbody>
+              ${o.items.map(i => `
+                <tr>
+                  <td><strong>${i.name}</strong></td>
+                  <td>Warna: ${i.color} | Ukuran: ${i.size}</td>
+                  <td style="text-align: center; font-weight: bold; font-size: 1.2rem;">${i.quantity}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          
+          <div style="margin-top: 40px; text-align: center; font-size: 0.9rem;">
+            Terima kasih telah berbelanja di Redline Truck Apparel.<br>
+            <em>The best or nothing</em>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
 
   document.getElementById('btn-export-excel')?.addEventListener('click', () => {

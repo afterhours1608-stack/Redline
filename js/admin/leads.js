@@ -14,13 +14,24 @@ async function fetchLeads() {
   const tbody = document.getElementById('leads-table-body');
   try {
     const res = await fetchWithAuth('/api/users/customers');
-    if (!res) return;
+    if (!res) return; // fetchWithAuth handles redirect on 401/403
     
-    allLeads = await res.json();
+    const data = await res.json();
+    
+    // Check if response is actually an array
+    if (Array.isArray(data)) {
+      allLeads = data;
+    } else {
+      console.error('API Error:', data);
+      allLeads = []; // Default to empty array to prevent map() crash
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--color-danger);">Gagal memuat data: ${data.error || 'Server error'}</td></tr>`;
+      return;
+    }
+    
     renderLeads(allLeads);
   } catch (err) {
     console.error('Failed to fetch leads', err);
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data pelanggan.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--color-danger);">Terjadi kesalahan koneksi saat memuat data pelanggan.</td></tr>';
   }
 }
 
