@@ -9,7 +9,7 @@ import ordersRoutes from './routes/orders.js';
 import dashboardRoutes from './routes/dashboard.js';
 import usersRoutes from './routes/users.js';
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 const app = express();
 
 app.use(cors());
