@@ -20,6 +20,7 @@ export default defineConfig({
         adminContent: resolve(__dirname, 'admin/content.html'),
         adminProducts: resolve(__dirname, 'admin/products.html'),
         adminOrders: resolve(__dirname, 'admin/orders.html'),
+        adminLeads: resolve(__dirname, 'admin/leads.html'),
       },
     },
   },
