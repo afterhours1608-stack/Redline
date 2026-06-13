@@ -23,9 +23,9 @@ export function renderNavbar() {
         </button>
 
         <!-- Logo -->
-        <a href="/" class="navbar__logo" style="align-items: center;">
-          <img src="/images/redline_logo_new.png" alt="REDLINE" class="navbar__logo-img" id="nav-logo" style="height: 75px; width: auto; object-fit: contain; display: block;" />
-          <span class="navbar__logo-text" id="nav-text" style="display: none;">REDLINE</span>
+        <a href="/" class="navbar__logo">
+          <span class="navbar__logo-text" id="nav-text"><span style="color: var(--color-danger);">RED</span>LINE</span>
+          <span class="navbar__logo-sub">TRUCK APPAREL</span>
         </a>
 
         <!-- Desktop Navigation -->
@@ -79,7 +79,10 @@ export function renderNavbar() {
     <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
     <div class="mobile-menu" id="mobile-menu">
       <div class="mobile-menu__header">
-        <span class="navbar__logo-text" style="font-size: 1.25rem;">REDLINE</span>
+        <div style="display: flex; flex-direction: column; line-height: 1;">
+          <span class="navbar__logo-text" style="font-size: 1.25rem;"><span style="color: var(--color-danger);">RED</span>LINE</span>
+          <span class="navbar__logo-sub" style="font-size: 0.45rem;">TRUCK APPAREL</span>
+        </div>
         <button class="mobile-menu__close" id="mobile-menu-close" aria-label="Tutup menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"/>
