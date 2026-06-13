@@ -209,6 +209,20 @@
   accent-color: var(--color-text-primary);
 }
 
+/* Actions */
+.checkout-main-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.checkout-main-actions .btn:first-child {
+  flex: 0 0 auto;
+}
+
+.checkout-main-actions .btn:last-child {
+  flex: 1;
+}
+
 /* Success */
 .checkout-success {
   text-align: center;
@@ -317,6 +331,7 @@
   
   .checkout-main-actions .btn {
     width: 100%;
+    flex: none !important;
     margin-bottom: var(--space-2);
   }
 }
