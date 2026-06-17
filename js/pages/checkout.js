@@ -330,7 +330,7 @@ function renderStep3() {
 
       <div style="border: 1px solid var(--color-border); padding: var(--space-4); margin-bottom: var(--space-4);">
         <h4 style="font-size: var(--font-size-sm); color: var(--color-text-secondary); margin-bottom: var(--space-3);">PEMBAYARAN</h4>
-        <div style="font-size: var(--font-size-sm);">${selectedPayment.toUpperCase()}</div>
+        <div style="font-size: var(--font-size-sm);">${orderForm.paymentMethod.toUpperCase()}</div>
       </div>
 
       <div style="background: var(--color-surface); padding: var(--space-5); margin-bottom: var(--space-6);">
@@ -370,7 +370,7 @@ async function placeOrder() {
     shippingProvince: orderForm.province || '-',
     shippingZip: orderForm.zip || '-',
     courier: selectedCourier,
-    paymentMethod: selectedPayment,
+    paymentMethod: orderForm.paymentMethod,
     subtotal,
     shippingCost: finalShipping,
     total,

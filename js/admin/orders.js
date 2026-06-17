@@ -69,11 +69,11 @@ async function init() {
             <td>${new Date(o.createdAt).toLocaleDateString('id-ID')}</td>
             <td>Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</td>
             <td>
-              <select style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; outline: none; background: #F9FAFB;" onchange="updateStatus('${o.id}', this.value)">
+              <select style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; outline: none; background: #F9FAFB;" onchange="if(this.value === 'rejected') { openRejectModal('${o.id}'); this.value = '${o.status}'; } else { updateStatus('${o.id}', this.value); }">
                 <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>Diproses</option>
                 <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Dikirim</option>
                 <option value="completed" ${o.status === 'completed' ? 'selected' : ''}>Selesai</option>
-                <option value="rejected" ${o.status === 'rejected' ? 'selected' : ''} disabled>Ditolak</option>
+                <option value="rejected" ${o.status === 'rejected' ? 'selected' : ''}>Ditolak</option>
                 <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''} disabled>Dibatalkan</option>
               </select>
             </td>
