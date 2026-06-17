@@ -11,7 +11,6 @@ export default defineConfig({
         produk: resolve(__dirname, 'produk.html'),
         keranjang: resolve(__dirname, 'keranjang.html'),
         checkout: resolve(__dirname, 'checkout.html'),
-        pembayaran: resolve(__dirname, 'pembayaran.html'),
         akun: resolve(__dirname, 'akun.html'),
         tentang: resolve(__dirname, 'tentang.html'),
         faq: resolve(__dirname, 'faq.html'),

@@ -871,3 +871,16 @@ textarea.input {
     display: none;
   }
 }
+  
+/* ÄÄ Payment Modal ÄÄ */  
+.payment-modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; visibility: hidden; transition: all 0.3s ease; }  
+.payment-modal-overlay.active { opacity: 1; visibility: visible; }  
+.payment-modal { background: #fff; width: 100%; max-width: 500px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }  
+.payment-modal-overlay.active .payment-modal { transform: scale(1) translateY(0); }  
+.payment-modal__header { padding: 24px 24px 16px; text-align: center; border-bottom: 1px solid #f3f4f6; }  
+.payment-modal__title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700; color: #111; letter-spacing: 0.05em; text-transform: uppercase; }  
+.payment-modal__subtitle { font-size: 0.875rem; color: #6b7280; margin-top: 4px; }  
+.payment-modal__body { padding: 24px; }  
+.payment-modal__bank { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: center; }  
+.payment-upload-area { border: 2px dashed #d1d5db; border-radius: 8px; padding: 32px 24px; text-align: center; cursor: pointer; transition: all 0.3s ease; background: #fafafa; }  
+.payment-upload-area:hover { border-color: #111; background: #f3f4f6; } 

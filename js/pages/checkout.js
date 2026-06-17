@@ -227,6 +227,7 @@ async function renderStep2() {
   try {
     const res = await fetch('/api/payments');
     payments = await res.json();
+    window.availablePayments = payments;
   } catch (err) {
     console.error(err);
   }
@@ -389,8 +390,7 @@ async function placeOrder() {
       const isCOD = orderForm.paymentMethod.toLowerCase().includes('cod');
       
       if (!isCOD) {
-        // Redirect to payment upload page
-        window.location.href = '/pembayaran.html?order=' + data.orderNumber;
+        showPaymentModal(data.orderNumber, total, orderForm.paymentMethod);
         return;
       }
 
@@ -457,4 +457,113 @@ function renderOrderSummary() {
       <div class="order-summary__row order-summary__row--total"><span>Total</span><span>${formatRupiah(total)}</span></div>
     </div>
   `;
+}
+
+function showPaymentModal(orderNumber, total, paymentName) {
+  const paymentDetails = window.availablePayments?.find(p => p.name === paymentName) || {};
+  const accNo = paymentDetails.accountNumber || '-';
+  const accName = paymentDetails.accountName || '-';
+
+  const modalHtml = `
+    <div class="payment-modal-overlay" id="payment-modal-overlay">
+      <div class="payment-modal">
+        <div class="payment-modal__header">
+          <div style="font-size: 0.875rem; color: #6b7280; font-weight: 500; margin-bottom: 8px;">ORDER ID: ${orderNumber}</div>
+          <h2 class="payment-modal__title">SELESAIKAN PEMBAYARAN</h2>
+          <p class="payment-modal__subtitle">Silakan transfer tepat sesuai nominal berikut</p>
+        </div>
+        <div class="payment-modal__body">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div style="font-size: 2.5rem; font-weight: 800; font-family: var(--font-display); letter-spacing: -1px; color: #111;">${formatRupiah(total)}</div>
+          </div>
+          <div class="payment-modal__bank">
+            <div style="font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">${paymentName}</div>
+            <div style="font-size: 1.125rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 4px;">${accNo}</div>
+            <div style="font-size: 0.875rem; color: #6b7280;">a.n. ${accName}</div>
+          </div>
+          
+          <div style="margin-bottom: 16px;">
+            <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 8px;">UPLOAD BUKTI TRANSFER</div>
+            <p style="font-size: 0.75rem; color: #ef4444; margin-bottom: 16px;">Pesanan tidak akan diproses sebelum Anda mengunggah bukti pembayaran.</p>
+            <label class="payment-upload-area" id="drop-area" style="display: block;">
+              <input type="file" id="proof-input" accept="image/*" style="display: none;" />
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" style="margin: 0 auto 12px; display: block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div style="font-weight: 600; font-size: 0.875rem;" id="upload-text">Klik untuk pilih foto bukti transfer</div>
+              <div style="font-size: 0.75rem; color: #9ca3af; margin-top: 4px;">Format: JPG, PNG (Maks. 5MB)</div>
+            </label>
+            <img id="proof-preview" style="width: 100%; height: auto; border-radius: 8px; margin-top: 16px; display: none;" />
+          </div>
+          
+          <button class="btn btn--primary btn--full" id="btn-submit-proof" disabled>KIRIM BUKTI PEMBAYARAN</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  
+  // Trigger animation
+  setTimeout(() => {
+    document.getElementById('payment-modal-overlay').classList.add('active');
+  }, 10);
+
+  // Setup upload logic
+  const fileInput = document.getElementById('proof-input');
+  const preview = document.getElementById('proof-preview');
+  const btnSubmit = document.getElementById('btn-submit-proof');
+  const dropArea = document.getElementById('drop-area');
+  const uploadText = document.getElementById('upload-text');
+  let selectedFile = null;
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      selectedFile = e.target.files[0];
+      preview.src = URL.createObjectURL(selectedFile);
+      preview.style.display = 'block';
+      uploadText.textContent = selectedFile.name;
+      btnSubmit.disabled = false;
+      dropArea.style.padding = '16px';
+    }
+  });
+
+  btnSubmit.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'MENGUNGGAH...';
+
+    const formData = new FormData();
+    formData.append('proof', selectedFile);
+
+    try {
+      const res = await fetch(\`/api/orders/\${orderNumber}/upload-proof\`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        document.querySelector('.payment-modal__body').innerHTML = \`
+          <div style="text-align: center; padding: 32px 0;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="margin: 0 auto 16px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: #111;">Bukti Berhasil Diunggah!</h3>
+            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 24px;">Pesanan Anda sedang dalam antrean dan akan segera diverifikasi oleh admin kami.</p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-direction: column;">
+              <a href="/katalog.html" class="btn btn--primary btn--full">LANJUT BELANJA</a>
+              <a href="/" class="btn btn--outline btn--full">KEMBALI KE HOME</a>
+            </div>
+          </div>
+        \`;
+      } else {
+        alert('Gagal mengunggah: ' + (data.error || 'Terjadi kesalahan'));
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'KIRIM BUKTI PEMBAYARAN';
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Terjadi kesalahan koneksi.');
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'KIRIM BUKTI PEMBAYARAN';
+    }
+  });
 }
