@@ -58,7 +58,7 @@ async function init() {
         ordersList.innerHTML = otherOrders.map(o => `
           <tr>
             <td><input type="checkbox" class="order-checkbox" data-order-id="${o.id}" style="width: 16px; height: 16px; cursor: pointer;" /></td>
-            <td><strong>${o.orderNumber}</strong></td>
+            <td><strong style="color: var(--color-primary); cursor: pointer; text-decoration: underline;" onclick="openDetailModal('${o.id}')" title="Lihat Detail">${o.orderNumber}</strong></td>
             <td>${o.customerName}<br><small>${o.customerPhone}</small></td>
             <td>
               ${o.items.map(i => `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
@@ -78,10 +78,9 @@ async function init() {
               </select>
             </td>
             <td>
-              <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; color: ${o.paymentMethod.toLowerCase().includes('cod') ? '#059669' : '#4F46E5'};">
+              <div style="font-weight: 600; font-size: 0.85rem; color: ${o.paymentMethod.toLowerCase().includes('cod') ? '#059669' : '#4F46E5'};">
                 ${o.paymentMethod.toUpperCase()}
               </div>
-              <button class="btn-view" onclick="openDetailModal('${o.id}')">Detail</button>
             </td>
           </tr>
         `).join('');
@@ -112,7 +111,7 @@ async function init() {
   window.openRejectModal = (id) => {
     document.getElementById('reject-order-id').value = id;
     document.getElementById('reject-reason').value = '';
-    rejectModal.style.display = 'flex';
+    document.getElementById('reject-modal').style.display = 'flex';
   };
 
   document.getElementById('reject-form').addEventListener('submit', (e) => {
@@ -120,7 +119,7 @@ async function init() {
     const id = document.getElementById('reject-order-id').value;
     const reason = document.getElementById('reject-reason').value;
     window.updateStatus(id, 'rejected', reason);
-    rejectModal.style.display = 'none';
+    document.getElementById('reject-modal').style.display = 'none';
   });
 
   window.openDetailModal = (id) => {
@@ -395,7 +394,8 @@ async function init() {
           'Harga Satuan': i.price,
           'Subtotal Produk': i.price * i.quantity,
           'Status Pesanan': o.status,
-          'Total Pesanan': o.total
+          'Total Pesanan': o.total,
+          'Metode Pembayaran': o.paymentMethod ? o.paymentMethod.toUpperCase() : '-'
         });
       });
     });
