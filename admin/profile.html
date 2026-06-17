@@ -21,6 +21,34 @@
       border: 2px solid #E5E7EB;
       margin-bottom: 1rem;
     }
+    .profile-form .form-group {
+      margin-bottom: 16px;
+    }
+    .profile-form .form-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--admin-text-main);
+    }
+    .profile-form .input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      background: var(--color-bg, #fff);
+      color: var(--admin-text-main);
+      transition: border-color 0.2s;
+    }
+    .profile-form .input:focus {
+      border-color: var(--admin-primary);
+    }
+    .profile-form .input:disabled {
+      background: #F3F4F6;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -60,7 +88,7 @@
       <div class="admin-nav__label">Sistem</div>
       <a href="/admin/content.html" class="admin-nav__link">
         <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-        Konten & Promo
+        Konten &amp; Promo
       </a>
       <a href="/admin/profile.html" class="admin-nav__link active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -72,6 +100,13 @@
         Logout
       </a>
     </nav>
+
+    <div class="admin-sidebar__footer">
+      <div class="theme-toggle">
+        <button class="active">Light</button>
+        <button>Dark</button>
+      </div>
+    </div>
   </aside>
 
   <main class="admin-main">
@@ -81,7 +116,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
         <div class="admin-header__greeting">
-          Pengaturan Profil
+          <strong>Pengaturan Profil</strong>
         </div>
       </div>
       
@@ -103,30 +138,30 @@
                 <img id="avatar-preview" src="https://ui-avatars.com/api/?name=Admin&background=E5E7EB&color=374151" class="profile-avatar-preview" />
                 <div>
                   <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
-                  <button type="button" class="btn btn-outline" onclick="document.getElementById('avatar-upload').click()">Ganti Foto</button>
+                  <button type="button" class="btn btn--outline" onclick="document.getElementById('avatar-upload').click()">Ganti Foto</button>
                   <p style="font-size: 0.8rem; color: #6B7280; margin-top: 8px;">Direkomendasikan rasio 1:1. Maksimal 2MB.</p>
                 </div>
               </div>
             </div>
 
-            <div class="form-group" style="margin-bottom: 16px;">
+            <div class="form-group">
               <label class="form-label">Nama Lengkap (Username)</label>
-              <input type="text" id="profile-name" class="form-control" placeholder="Masukkan nama" required />
+              <input type="text" id="profile-name" class="input" placeholder="Masukkan nama" required />
             </div>
 
-            <div class="form-group" style="margin-bottom: 16px;">
+            <div class="form-group">
               <label class="form-label">Alamat Email</label>
-              <input type="email" id="profile-email" class="form-control" disabled style="background: #F3F4F6;" />
+              <input type="email" id="profile-email" class="input" disabled />
               <p style="font-size: 0.8rem; color: #6B7280; margin-top: 4px;">Email tidak dapat diubah (digunakan untuk login).</p>
             </div>
 
             <div class="form-group" style="margin-bottom: 32px;">
               <label class="form-label">Password Baru (Opsional)</label>
-              <input type="password" id="profile-password" class="form-control" placeholder="Biarkan kosong jika tidak ingin mengubah password" />
+              <input type="password" id="profile-password" class="input" placeholder="Biarkan kosong jika tidak ingin mengubah password" />
             </div>
 
             <div style="display: flex; gap: 12px;">
-              <button type="submit" class="btn btn-primary" id="btn-save-profile">Simpan Perubahan</button>
+              <button type="submit" class="btn btn--primary" id="btn-save-profile">Simpan Perubahan</button>
             </div>
             <div id="profile-message" style="margin-top: 16px; font-weight: 500;"></div>
           </form>

@@ -53,6 +53,13 @@ router.get('/:slug', async (req, res) => {
 router.post('/', requireAdmin, async (req, res) => {
   try {
     const { name, slug, description, price, salePrice, badge, images, categoryId, variants } = req.body;
+    const variantData = (variants || []).map(v => ({
+      size: v.size,
+      color: v.color,
+      stock: Number(v.stock) || 0,
+      price: v.price != null ? Number(v.price) : null,
+      sku: v.sku || null
+    }));
     const product = await prisma.product.create({
       data: {
         name, slug, description, 
@@ -61,7 +68,7 @@ router.post('/', requireAdmin, async (req, res) => {
         badge, categoryId,
         images: JSON.stringify(images || []),
         variants: {
-          create: variants || [] // { size, color, stock, sku }
+          create: variantData
         }
       },
       include: { variants: true }
@@ -82,6 +89,14 @@ router.put('/:id', requireAdmin, async (req, res) => {
       await prisma.productVariant.deleteMany({ where: { productId: req.params.id } });
     }
 
+    const variantData = variants ? variants.map(v => ({
+      size: v.size,
+      color: v.color,
+      stock: Number(v.stock) || 0,
+      price: v.price != null ? Number(v.price) : null,
+      sku: v.sku || null
+    })) : undefined;
+
     const product = await prisma.product.update({
       where: { id: req.params.id },
       data: {
@@ -90,7 +105,7 @@ router.put('/:id', requireAdmin, async (req, res) => {
         salePrice: salePrice ? Number(salePrice) : null,
         badge, categoryId,
         images: JSON.stringify(images || []),
-        variants: variants ? { create: variants } : undefined
+        variants: variantData ? { create: variantData } : undefined
       },
       include: { variants: true }
     });

@@ -39,21 +39,26 @@ export function getCartTotal() {
   }, 0);
 }
 
-export function addToCart(product, size, color, qty = 1) {
+export function addToCart(product, size, color, qty = 1, variantPrice = null) {
   const cart = getCart();
   const key = `${product.id}-${size}-${color}`;
 
   const existing = cart.find(item => item.key === key);
   if (existing) {
     existing.qty += qty;
+    // Update price if variant price changed
+    if (variantPrice != null) {
+      existing.price = variantPrice;
+      existing.salePrice = null; // variant price takes priority
+    }
   } else {
     cart.push({
       key,
       productId: product.id,
       name: product.name,
       slug: product.slug,
-      price: product.price,
-      salePrice: product.salePrice,
+      price: variantPrice != null ? variantPrice : product.price,
+      salePrice: variantPrice != null ? null : product.salePrice,
       image: Array.isArray(product.images) ? product.images[0] : (product.images?.front || ''),
       size,
       color,

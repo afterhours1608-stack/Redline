@@ -430,3 +430,189 @@ body {
   .admin-content { padding: 0 16px 16px; }
   .admin-header__right .admin-search { display: none; }
 }
+
+/* ============================
+   DARK MODE
+   ============================ */
+body.dark-mode {
+  --admin-bg: #0f1117;
+  --admin-sidebar: #1a1d27;
+  --admin-card: #1a1d27;
+  --admin-primary: #3B82F6;
+  --admin-primary-hover: #60A5FA;
+  --admin-text-main: #E5E7EB;
+  --admin-text-muted: #9CA3AF;
+  --admin-border: #2d3140;
+  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+
+  --color-bg: #1a1d27;
+  --color-text: #E5E7EB;
+  --color-text-secondary: #9CA3AF;
+  --color-surface: #252836;
+
+  background-color: var(--admin-bg);
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .admin-sidebar {
+  background-color: var(--admin-sidebar);
+  border-right: 1px solid var(--admin-border);
+  box-shadow: none;
+}
+
+body.dark-mode .admin-sidebar__logo-text {
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .admin-nav__link:hover:not(.active) {
+  background-color: #252836;
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .admin-sidebar__footer {
+  border-top-color: var(--admin-border);
+}
+
+body.dark-mode .theme-toggle {
+  background: #252836;
+}
+
+body.dark-mode .theme-toggle button {
+  color: var(--admin-text-muted);
+}
+
+body.dark-mode .theme-toggle button.active {
+  background: #3d4156;
+  color: #fff;
+  box-shadow: none;
+}
+
+body.dark-mode .admin-header {
+  background: rgba(15, 17, 23, 0.8);
+}
+
+body.dark-mode .admin-search {
+  background: #252836;
+  box-shadow: none;
+}
+
+body.dark-mode .admin-search input {
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .admin-search input::placeholder {
+  color: var(--admin-text-muted);
+}
+
+body.dark-mode .admin-icon-btn {
+  background: #252836;
+  color: var(--admin-text-muted);
+  box-shadow: none;
+}
+
+body.dark-mode .admin-avatar {
+  border-color: #3d4156;
+}
+
+body.dark-mode .admin-card {
+  background-color: var(--admin-card);
+  box-shadow: var(--admin-shadow);
+}
+
+body.dark-mode .admin-card-title {
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .stat-card__title {
+  color: var(--admin-text-muted);
+}
+
+body.dark-mode .stat-card__value {
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .stat-card__icon {
+  opacity: 0.85;
+}
+
+body.dark-mode .admin-table th {
+  color: var(--admin-text-muted);
+  border-bottom-color: var(--admin-border);
+}
+
+body.dark-mode .admin-table td {
+  color: var(--admin-text-main);
+  border-bottom-color: var(--admin-border);
+}
+
+body.dark-mode .admin-table tbody tr:hover {
+  background-color: #252836;
+}
+
+body.dark-mode .btn-view {
+  background: #252836;
+  color: var(--admin-primary);
+}
+
+body.dark-mode .btn-view:hover {
+  background: #3d4156;
+}
+
+body.dark-mode .modal-content {
+  background: var(--admin-card) !important;
+  color: var(--admin-text-main);
+  border: 1px solid var(--admin-border);
+}
+
+body.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+body.dark-mode select {
+  background: #252836 !important;
+  color: var(--admin-text-main) !important;
+  border-color: var(--admin-border) !important;
+}
+
+body.dark-mode .input,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="tel"],
+body.dark-mode textarea {
+  background: #252836;
+  color: var(--admin-text-main);
+  border-color: var(--admin-border);
+}
+
+body.dark-mode .input:focus,
+body.dark-mode input:focus,
+body.dark-mode textarea:focus {
+  border-color: var(--admin-primary);
+}
+
+body.dark-mode .input::placeholder,
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: var(--admin-text-muted);
+}
+
+body.dark-mode .btn.btn--outline {
+  border-color: var(--admin-border);
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .admin-header__greeting,
+body.dark-mode .admin-header__greeting strong {
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .form-label {
+  color: var(--admin-text-main);
+}
+
+body.dark-mode .status-pill.published {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60A5FA;
+}

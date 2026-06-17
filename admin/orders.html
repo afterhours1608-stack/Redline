@@ -46,7 +46,7 @@
       <div class="admin-nav__label">Sistem</div>
       <a href="/admin/content.html" class="admin-nav__link">
         <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-        Konten & Promo
+        Konten &amp; Promo
       </a>
       <a href="/admin/profile.html" class="admin-nav__link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -74,11 +74,19 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
         <div class="admin-header__greeting">
-          <strong>Orders</strong>
+          <strong>Pesanan</strong>
         </div>
       </div>
       
       <div class="admin-header__right">
+        <button id="btn-print-selected" class="btn btn--outline" onclick="printSelectedReceipts()" style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; padding: 6px 12px; border-color: #4F46E5; color: #4F46E5;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Cetak Terpilih
+        </button>
+        <button id="btn-print-all" class="btn btn--outline" onclick="printAllReceipts()" style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; padding: 6px 12px; border-color: #059669; color: #059669;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Cetak Semua
+        </button>
         <button id="btn-export-excel" class="btn btn--outline" style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; padding: 6px 12px; border-color: #10B981; color: #10B981;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Export Excel
@@ -110,7 +118,7 @@
               </tr>
             </thead>
             <tbody id="new-orders-list">
-              <tr><td colspan="5" style="text-align: center; padding: 24px;">Memuat pesanan baru...</td></tr>
+              <tr><td colspan="6" style="text-align: center; padding: 24px;">Memuat pesanan baru...</td></tr>
             </tbody>
           </table>
         </div>
@@ -125,9 +133,10 @@
           <table class="admin-table">
             <thead>
               <tr>
+                <th style="width: 40px;"><input type="checkbox" onchange="toggleSelectAll(this.checked)" style="width: 16px; height: 16px; cursor: pointer;" title="Pilih semua" /></th>
                 <th>Order ID</th>
                 <th>Pelanggan</th>
-                <th>Detail Produk (Warna, Ukuran, Qty)</th>
+                <th>Detail Produk</th>
                 <th>Tanggal</th>
                 <th>Total</th>
                 <th>Status</th>
@@ -135,7 +144,7 @@
               </tr>
             </thead>
             <tbody id="orders-list">
-              <tr><td colspan="6" style="text-align: center; padding: 24px;">Memuat pesanan...</td></tr>
+              <tr><td colspan="8" style="text-align: center; padding: 24px;">Memuat pesanan...</td></tr>
             </tbody>
           </table>
         </div>
@@ -144,7 +153,7 @@
 
     <!-- Reject Modal -->
     <div id="reject-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; padding: 20px;">
-      <div class="modal-content" style="background: var(--color-bg); width: 100%; max-width: 400px; border-radius: 8px; padding: 24px;">
+      <div class="modal-content" style="background: var(--color-bg); width: 100%; max-width: 400px; border-radius: 12px; padding: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <h2 style="font-size: 1.25rem; margin: 0; color: #EF4444;">Tolak Pesanan</h2>
           <button id="close-reject-btn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
@@ -162,7 +171,7 @@
 
     <!-- Detail Modal -->
     <div id="detail-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; padding: 20px;">
-      <div class="modal-content" style="background: var(--color-bg); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-radius: 8px; padding: 24px;">
+      <div class="modal-content" style="background: var(--color-bg); width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; border-radius: 12px; padding: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <h2 style="font-size: 1.25rem; margin: 0;">Detail Pesanan</h2>
           <button id="close-detail-btn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>

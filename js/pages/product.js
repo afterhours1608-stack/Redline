@@ -10,6 +10,7 @@ import { createProductCard } from '../components/product-card.js';
 let selectedSize = '';
 let selectedColor = '';
 let qty = 1;
+let currentProduct = null;
 
 export async function initProductPage() {
   const slug = getUrlParam('slug');
@@ -30,6 +31,7 @@ export async function initProductPage() {
     return;
   }
 
+  currentProduct = product;
   selectedSize = product.sizes[0];
   selectedColor = product.colors[0]?.name || '';
 
@@ -42,6 +44,34 @@ export async function initProductPage() {
   initTabs();
   initSizeGuide(product);
   await renderRelated(product);
+}
+
+function getCurrentVariantPrice(product) {
+  // Try exact size-color match first
+  const key = `${selectedSize}-${selectedColor}`;
+  if (product.variantPrices && product.variantPrices[key] != null) {
+    return product.variantPrices[key];
+  }
+  // Fallback to size-based price
+  if (product.variantPricesBySize && product.variantPricesBySize[selectedSize] != null) {
+    return product.variantPricesBySize[selectedSize];
+  }
+  // Fallback to base price
+  return product.salePrice || product.price;
+}
+
+function updatePriceDisplay(product) {
+  const priceEl = document.getElementById('pdp-current-price');
+  const startFromEl = document.getElementById('pdp-start-from');
+  if (!priceEl) return;
+
+  const variantPrice = getCurrentVariantPrice(product);
+  priceEl.textContent = formatRupiah(variantPrice);
+  
+  // Hide "Mulai dari" once user selects a size
+  if (startFromEl) {
+    startFromEl.style.display = 'none';
+  }
 }
 
 function renderProduct(product) {
@@ -62,6 +92,10 @@ function renderProduct(product) {
     `;
   }
 
+  // Price display logic
+  const displayPrice = product.hasVariantPricing ? product.minPrice : (product.salePrice || product.price);
+  const showStartFrom = product.hasVariantPricing;
+  
   const discountPercent = product.salePrice
     ? Math.round((1 - product.salePrice / product.price) * 100)
     : 0;
@@ -100,8 +134,9 @@ function renderProduct(product) {
         </div>
 
         <div class="pdp-info__price">
-          <span class="pdp-info__price-current ${product.salePrice ? 'price--sale' : ''}">${formatRupiah(product.salePrice || product.price)}</span>
-          ${product.salePrice ? `
+          ${showStartFrom ? `<span class="pdp-info__start-from" id="pdp-start-from" style="font-size: 0.85rem; color: var(--color-text-secondary); margin-right: 4px;">Mulai dari</span>` : ''}
+          <span class="pdp-info__price-current ${product.salePrice && !product.hasVariantPricing ? 'price--sale' : ''}" id="pdp-current-price">${formatRupiah(displayPrice)}</span>
+          ${product.salePrice && !product.hasVariantPricing ? `
             <span class="pdp-info__price-original">${formatRupiah(product.price)}</span>
             <span class="pdp-info__price-discount">-${discountPercent}%</span>
           ` : ''}
@@ -116,9 +151,12 @@ function renderProduct(product) {
             <button class="pdp-option__size-guide" id="size-guide-btn">Panduan Ukuran</button>
           </div>
           <div class="size-options" id="pdp-sizes">
-            ${product.sizes.map((size, i) => `
-              <button class="size-option ${i === 0 ? 'active' : ''}" data-size="${size}">${size}</button>
-            `).join('')}
+            ${product.sizes.map((size, i) => {
+              // Show price per size if variant pricing exists
+              const sizePrice = product.variantPricesBySize?.[size];
+              const priceLabel = product.hasVariantPricing && sizePrice ? ` — ${formatRupiah(sizePrice)}` : '';
+              return `<button class="size-option ${i === 0 ? 'active' : ''}" data-size="${size}" title="${size}${priceLabel}">${size}</button>`;
+            }).join('')}
           </div>
         </div>
 
@@ -257,6 +295,9 @@ function initSizeOptions(product) {
       btn.classList.add('active');
       selectedSize = btn.dataset.size;
       if (sizeLabel) sizeLabel.textContent = selectedSize;
+      
+      // Update price display when size changes
+      updatePriceDisplay(product);
     });
   });
 }
@@ -271,6 +312,9 @@ function initColorOptions(product) {
       swatch.classList.add('active');
       selectedColor = swatch.dataset.color;
       if (colorLabel) colorLabel.textContent = selectedColor;
+
+      // Update price display when color changes
+      updatePriceDisplay(product);
     });
   });
 }
@@ -307,14 +351,16 @@ function initAddToCart(product) {
   const buyNowBtn = document.getElementById('buy-now');
 
   addBtn?.addEventListener('click', () => {
-    addToCart(product, selectedSize, selectedColor, qty);
+    const variantPrice = getCurrentVariantPrice(product);
+    addToCart(product, selectedSize, selectedColor, qty, variantPrice);
     showToast(`${product.name} (${selectedSize}, ${selectedColor}) ditambahkan ke keranjang!`);
     window.dispatchEvent(new CustomEvent('cart:toggle'));
   });
 
   buyNowBtn?.addEventListener('click', (e) => {
     e.preventDefault();
-    addToCart(product, selectedSize, selectedColor, qty);
+    const variantPrice = getCurrentVariantPrice(product);
+    addToCart(product, selectedSize, selectedColor, qty, variantPrice);
     window.location.href = '/checkout.html';
   });
 }

@@ -128,8 +128,9 @@
           </div>
           <div style="display: flex; gap: 16px;">
             <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Harga (Rp)</label>
+              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Harga Dasar (Rp)</label>
               <input type="number" id="prod-price" class="input" style="width: 100%;" required>
+              <p style="font-size: 0.75rem; color: #9CA3AF; margin-top: 4px;">Harga default jika varian tidak punya harga sendiri</p>
             </div>
             <div style="flex: 1;">
               <label style="display: block; margin-bottom: 4px; font-weight: 500;">Harga Coret / Sale (Opsional)</label>
@@ -150,6 +151,38 @@
             <label style="display: block; margin-bottom: 4px; font-weight: 500;">Badge (Opsional)</label>
             <input type="text" id="prod-badge" class="input" style="width: 100%;" placeholder="e.g. Terlaris, Baru, Sale">
           </div>
+
+          <!-- Variant Management -->
+          <div style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <label style="font-weight: 600; font-size: 0.95rem;">Varian Produk (Ukuran, Warna & Harga)</label>
+              <button type="button" id="add-variant-btn" style="background: #3B82F6; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">+ Tambah Varian</button>
+            </div>
+            <p style="font-size: 0.75rem; color: #9CA3AF; margin-bottom: 12px;">Harga per varian bersifat opsional. Jika kosong, akan menggunakan harga dasar produk.</p>
+            <div style="overflow-x: auto;">
+              <table class="admin-table" style="min-width: 500px;">
+                <thead>
+                  <tr>
+                    <th style="padding: 8px;">Ukuran</th>
+                    <th style="padding: 8px;">Warna</th>
+                    <th style="padding: 8px;">Harga (Rp)</th>
+                    <th style="padding: 8px;">Stok</th>
+                    <th style="padding: 8px; width: 50px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="variants-list">
+                  <tr class="variant-row">
+                    <td style="padding: 6px;"><input type="text" class="input variant-size" style="width: 100%; padding: 6px 8px;" value="All Size" required></td>
+                    <td style="padding: 6px;"><input type="text" class="input variant-color" style="width: 100%; padding: 6px 8px;" value="Hitam" required></td>
+                    <td style="padding: 6px;"><input type="number" class="input variant-price" style="width: 100%; padding: 6px 8px;" placeholder="Opsional"></td>
+                    <td style="padding: 6px;"><input type="number" class="input variant-stock" style="width: 100%; padding: 6px 8px;" value="10" min="0" required></td>
+                    <td style="padding: 6px; text-align: center;"><button type="button" class="remove-variant-btn" style="background: #FEE2E2; color: #EF4444; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem;">×</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
             <div class="form-group">
               <label style="display: block; margin-bottom: 4px; font-weight: 500;">Gambar Utama (Wajib)</label>

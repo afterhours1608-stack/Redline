@@ -23,23 +23,33 @@ async function init() {
         return;
       }
 
-      list.innerHTML = allProductsData.map(p => `
-        <tr>
-          <td><img src="${p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : ''+p.images[0]) : ''}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" /></td>
-          <td><strong>${p.name}</strong></td>
-          <td>Rp ${new Intl.NumberFormat('id-ID').format(p.price)}</td>
-          <td>
-            <span class="status-pill published" style="background: #EFF6FF; color: #3B82F6;">${p.category ? p.category.name : '-'}</span>
-            <div style="font-size: 0.8rem; margin-top: 4px; color: #6B7280;">${p.variants.reduce((acc, v) => acc + v.stock, 0)} in stock</div>
-          </td>
-          <td>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-view" onclick="editProduct('${p.id}')">Edit</button>
-              <button class="btn-view" style="background: #FEE2E2; color: #EF4444;" onclick="deleteProduct('${p.id}')">Hapus</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+      list.innerHTML = allProductsData.map(p => {
+        // Calculate min price from variants
+        const variantPrices = p.variants.filter(v => v.price != null).map(v => v.price);
+        const minPrice = variantPrices.length > 0 ? Math.min(...variantPrices) : p.price;
+        const maxPrice = variantPrices.length > 0 ? Math.max(...variantPrices) : p.price;
+        const priceDisplay = variantPrices.length > 0 && minPrice !== maxPrice
+          ? `Rp ${new Intl.NumberFormat('id-ID').format(minPrice)} - ${new Intl.NumberFormat('id-ID').format(maxPrice)}`
+          : `Rp ${new Intl.NumberFormat('id-ID').format(p.price)}`;
+
+        return `
+          <tr>
+            <td><img src="${p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : ''+p.images[0]) : ''}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" /></td>
+            <td><strong>${p.name}</strong></td>
+            <td>${priceDisplay}</td>
+            <td>
+              <span class="status-pill published" style="background: #EFF6FF; color: #3B82F6;">${p.category ? p.category.name : '-'}</span>
+              <div style="font-size: 0.8rem; margin-top: 4px; color: #6B7280;">${p.variants.reduce((acc, v) => acc + v.stock, 0)} in stock</div>
+            </td>
+            <td>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-view" onclick="editProduct('${p.id}')">Edit</button>
+                <button class="btn-view" style="background: #FEE2E2; color: #EF4444;" onclick="deleteProduct('${p.id}')">Hapus</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
     } catch (err) {
       list.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat produk</td></tr>';
     }
@@ -54,6 +64,71 @@ async function init() {
       alert('Gagal menghapus');
     }
   };
+
+  // ========== VARIANT MANAGEMENT ==========
+
+  function addVariantRow(size = '', color = '', price = '', stock = '0') {
+    const tbody = document.getElementById('variants-list');
+    const tr = document.createElement('tr');
+    tr.className = 'variant-row';
+    tr.innerHTML = `
+      <td style="padding: 6px;"><input type="text" class="input variant-size" style="width: 100%; padding: 6px 8px;" value="${size}" required></td>
+      <td style="padding: 6px;"><input type="text" class="input variant-color" style="width: 100%; padding: 6px 8px;" value="${color}" required></td>
+      <td style="padding: 6px;"><input type="number" class="input variant-price" style="width: 100%; padding: 6px 8px;" placeholder="Opsional" value="${price}"></td>
+      <td style="padding: 6px;"><input type="number" class="input variant-stock" style="width: 100%; padding: 6px 8px;" value="${stock}" min="0" required></td>
+      <td style="padding: 6px; text-align: center;"><button type="button" class="remove-variant-btn" style="background: #FEE2E2; color: #EF4444; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 1rem;">×</button></td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  function getVariantsFromForm() {
+    const rows = document.querySelectorAll('.variant-row');
+    const variants = [];
+    rows.forEach(row => {
+      const size = row.querySelector('.variant-size').value.trim();
+      const color = row.querySelector('.variant-color').value.trim();
+      const priceVal = row.querySelector('.variant-price').value.trim();
+      const stock = parseInt(row.querySelector('.variant-stock').value) || 0;
+      if (size && color) {
+        variants.push({
+          size,
+          color,
+          price: priceVal ? parseInt(priceVal) : null,
+          stock
+        });
+      }
+    });
+    return variants;
+  }
+
+  function populateVariants(variants) {
+    const tbody = document.getElementById('variants-list');
+    tbody.innerHTML = '';
+    if (variants.length === 0) {
+      addVariantRow('All Size', 'Hitam', '', '10');
+    } else {
+      variants.forEach(v => {
+        addVariantRow(v.size, v.color, v.price != null ? v.price : '', v.stock);
+      });
+    }
+  }
+
+  document.getElementById('add-variant-btn')?.addEventListener('click', () => {
+    addVariantRow('', '', '', '10');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-variant-btn')) {
+      const rows = document.querySelectorAll('.variant-row');
+      if (rows.length > 1) {
+        e.target.closest('.variant-row').remove();
+      } else {
+        alert('Minimal harus ada 1 varian.');
+      }
+    }
+  });
+
+  // ========== EDIT PRODUCT ==========
 
   window.editProduct = (id) => {
     const p = allProductsData.find(prod => prod.id === id);
@@ -84,6 +159,9 @@ async function init() {
         preview.src = '';
       }
     });
+
+    // Populate variants
+    populateVariants(p.variants || []);
 
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
@@ -120,6 +198,9 @@ async function init() {
     ['prod-img-main', 'prod-img-front', 'prod-img-back', 'prod-img-detail', 'prod-img-opt1', 'prod-img-opt2', 'prod-img-opt3'].forEach(id => {
       document.getElementById(id).value = '';
     });
+    // Reset variants to default
+    populateVariants([]);
+    
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
   });
@@ -175,6 +256,14 @@ async function init() {
     saveBtn.disabled = true;
     saveBtn.innerText = 'Menyimpan...';
 
+    const variants = getVariantsFromForm();
+    if (variants.length === 0) {
+      alert('Minimal harus ada 1 varian produk.');
+      saveBtn.disabled = false;
+      saveBtn.innerText = 'Simpan Produk';
+      return;
+    }
+
     const payload = {
       name: document.getElementById('prod-name').value,
       slug: document.getElementById('prod-slug').value,
@@ -192,13 +281,8 @@ async function init() {
         document.getElementById('prod-img-opt2').value,
         document.getElementById('prod-img-opt3').value
       ].filter(url => url !== ""),
+      variants
     };
-
-    if (!currentEditId) {
-      payload.variants = [
-        { size: 'All Size', color: 'Hitam', stock: 10 }
-      ];
-    }
 
     if (payload.images.length === 0) {
       alert('Mohon unggah Gambar Utama terlebih dahulu.');

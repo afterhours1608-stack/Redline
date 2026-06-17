@@ -24,14 +24,17 @@ async function init() {
       const otherOrders = allOrdersData.filter(o => o.status !== 'pending');
 
       if (newOrders.length === 0) {
-        newOrdersList.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 24px;">Belum ada pesanan baru</td></tr>';
+        newOrdersList.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;">Belum ada pesanan baru</td></tr>';
       } else {
         newOrdersList.innerHTML = newOrders.map(o => `
           <tr>
             <td><strong>${o.orderNumber}</strong></td>
             <td>${o.customerName}<br><small>${o.customerPhone}</small></td>
             <td>
-              ${o.items.map(i => `<div style="font-size: 0.85rem; margin-bottom: 2px; color: #4B5563;">&bull; ${i.name} <br><span style="color:#9CA3AF; font-size: 0.75rem;">(${i.color}, ${i.size}) x ${i.quantity}</span></div>`).join('')}
+              ${o.items.map(i => `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                ${i.image ? `<img src="${i.image}" style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px; flex-shrink: 0;" />` : ''}
+                <div style="font-size: 0.85rem; color: #4B5563;">${i.name}<br><span style="color:#9CA3AF; font-size: 0.75rem;">(${i.color}, ${i.size}) x ${i.quantity}</span></div>
+              </div>`).join('')}
             </td>
             <td>${new Date(o.createdAt).toLocaleDateString('id-ID')}</td>
             <td>Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</td>
@@ -47,14 +50,18 @@ async function init() {
       }
 
       if (otherOrders.length === 0) {
-        ordersList.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;">Belum ada pesanan</td></tr>';
+        ordersList.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 24px;">Belum ada pesanan</td></tr>';
       } else {
         ordersList.innerHTML = otherOrders.map(o => `
           <tr>
+            <td><input type="checkbox" class="order-checkbox" data-order-id="${o.id}" style="width: 16px; height: 16px; cursor: pointer;" /></td>
             <td><strong>${o.orderNumber}</strong></td>
             <td>${o.customerName}<br><small>${o.customerPhone}</small></td>
             <td>
-              ${o.items.map(i => `<div style="font-size: 0.85rem; margin-bottom: 2px; color: #4B5563;">&bull; ${i.name} <br><span style="color:#9CA3AF; font-size: 0.75rem;">(${i.color}, ${i.size}) x ${i.quantity}</span></div>`).join('')}
+              ${o.items.map(i => `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                ${i.image ? `<img src="${i.image}" style="width: 36px; height: 36px; object-fit: cover; border-radius: 4px; flex-shrink: 0;" />` : ''}
+                <div style="font-size: 0.85rem; color: #4B5563;">${i.name}<br><span style="color:#9CA3AF; font-size: 0.75rem;">(${i.color}, ${i.size}) x ${i.quantity}</span></div>
+              </div>`).join('')}
             </td>
             <td>${new Date(o.createdAt).toLocaleDateString('id-ID')}</td>
             <td>Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</td>
@@ -75,8 +82,8 @@ async function init() {
       }
     } catch (err) {
       console.error(err);
-      newOrdersList.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat</td></tr>';
-      ordersList.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat</td></tr>';
+      newOrdersList.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat</td></tr>';
+      ordersList.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red;">Gagal memuat</td></tr>';
     }
   }
 
@@ -114,54 +121,96 @@ async function init() {
     const o = allOrdersData.find(order => order.id === id);
     if (!o) return;
 
+    const statusLabels = {
+      pending: { text: 'Menunggu', bg: '#FEF3C7', color: '#D97706' },
+      processing: { text: 'Diproses', bg: '#DBEAFE', color: '#2563EB' },
+      shipped: { text: 'Dikirim', bg: '#E0E7FF', color: '#4F46E5' },
+      completed: { text: 'Selesai', bg: '#D1FAE5', color: '#059669' },
+      rejected: { text: 'Ditolak', bg: '#FEE2E2', color: '#DC2626' },
+      cancelled: { text: 'Dibatalkan', bg: '#F3F4F6', color: '#6B7280' }
+    };
+    const status = statusLabels[o.status] || statusLabels.pending;
+
     const content = `
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+        <span style="font-size: 1.1rem; font-weight: 700;">Order ${o.orderNumber}</span>
+        <span style="padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: ${status.bg}; color: ${status.color};">${status.text}</span>
+        <span style="margin-left: auto; font-size: 0.85rem; color: #9CA3AF;">${new Date(o.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+      </div>
+
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
-        <div>
-          <strong>Informasi Pelanggan</strong><br>
-          ${o.customerName}<br>
-          ${o.customerEmail}<br>
-          ${o.customerPhone}
+        <div style="background: var(--admin-bg, #F4F7FE); padding: 16px; border-radius: 12px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #9CA3AF; margin-bottom: 8px; font-weight: 700;">Informasi Pelanggan</div>
+          <div style="font-weight: 600; font-size: 0.95rem;">${o.customerName}</div>
+          <div style="font-size: 0.85rem; color: #6B7280; margin-top: 4px;">${o.customerEmail}</div>
+          <div style="font-size: 0.85rem; color: #6B7280;">${o.customerPhone}</div>
         </div>
-        <div>
-          <strong>Pengiriman</strong><br>
-          ${o.shippingAddress}, ${o.shippingCity}<br>
-          ${o.shippingProvince}, ${o.shippingZip}<br>
-          Kurir: <strong>${o.courier.toUpperCase()}</strong>
+        <div style="background: var(--admin-bg, #F4F7FE); padding: 16px; border-radius: 12px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #9CA3AF; margin-bottom: 8px; font-weight: 700;">Pengiriman</div>
+          <div style="font-size: 0.85rem;">${o.shippingAddress}</div>
+          <div style="font-size: 0.85rem;">${o.shippingCity}, ${o.shippingProvince} ${o.shippingZip}</div>
+          <div style="font-size: 0.85rem; margin-top: 4px;">Kurir: <strong>${o.courier.toUpperCase()}</strong></div>
+          <div style="font-size: 0.85rem;">Pembayaran: <strong>${o.paymentMethod ? o.paymentMethod.toUpperCase() : '-'}</strong></div>
         </div>
       </div>
+
       <div>
-        <strong>Item Pesanan</strong>
-        <table class="admin-table" style="margin-top: 8px;">
+        <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #9CA3AF; margin-bottom: 12px; font-weight: 700;">Item Pesanan</div>
+        <table class="admin-table" style="margin-top: 0;">
           <thead>
-            <tr><th style="width: 60px;">Foto</th><th>Produk</th><th>Harga</th><th>Qty</th><th>Subtotal</th></tr>
+            <tr>
+              <th style="width: 80px;">Foto</th>
+              <th>Produk</th>
+              <th style="width: 100px;">Harga</th>
+              <th style="width: 50px;">Qty</th>
+              <th style="width: 110px;">Subtotal</th>
+            </tr>
           </thead>
           <tbody>
             ${o.items.map(i => `
               <tr>
                 <td>
-                  ${i.image ? `<img src="${i.image}" alt="${i.name}" style="width: 48px; height: 60px; object-fit: cover; border-radius: 4px; background: #f3f4f6;" />` : `<div style="width: 48px; height: 60px; background: #e5e7eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af;">No Img</div>`}
+                  ${i.image ? `<img src="${i.image}" alt="${i.name}" style="width: 70px; height: 85px; object-fit: cover; border-radius: 8px; background: #f3f4f6; display: block;" />` : `<div style="width: 70px; height: 85px; background: #e5e7eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af;">No Img</div>`}
                 </td>
                 <td>
-                  <div style="font-weight: 500;">${i.name}</div>
+                  <div style="font-weight: 600; margin-bottom: 2px;">${i.name}</div>
                   <div style="font-size: 0.8rem; color: #6b7280;">Warna: ${i.color} | Ukuran: ${i.size}</div>
                 </td>
                 <td>Rp ${new Intl.NumberFormat('id-ID').format(i.price)}</td>
-                <td>${i.quantity}</td>
-                <td>Rp ${new Intl.NumberFormat('id-ID').format(i.price * i.quantity)}</td>
+                <td style="text-align: center; font-weight: 600;">${i.quantity}</td>
+                <td style="font-weight: 600;">Rp ${new Intl.NumberFormat('id-ID').format(i.price * i.quantity)}</td>
               </tr>
             `).join('')}
           </tbody>
         </table>
       </div>
-      <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center;">
-        <button class="btn btn--primary" style="background: #4F46E5; display: flex; align-items: center; gap: 8px;" onclick="printReceipt('${o.id}')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-          Cetak Resi Packing
-        </button>
-        <div style="text-align: right;">
-          <strong>Total Bayar: Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</strong>
+
+      <div style="margin-top: 16px; background: var(--admin-bg, #F4F7FE); padding: 16px; border-radius: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px;">
+          <span style="color: #6B7280;">Subtotal</span>
+          <span>Rp ${new Intl.NumberFormat('id-ID').format(o.subtotal)}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px;">
+          <span style="color: #6B7280;">Ongkir</span>
+          <span>${o.shippingCost === 0 ? '<span style="color: #059669;">GRATIS</span>' : 'Rp ' + new Intl.NumberFormat('id-ID').format(o.shippingCost)}</span>
+        </div>
+        ${o.discount > 0 ? `<div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px;">
+          <span style="color: #6B7280;">Diskon</span>
+          <span style="color: #DC2626;">- Rp ${new Intl.NumberFormat('id-ID').format(o.discount)}</span>
+        </div>` : ''}
+        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; padding-top: 10px; border-top: 2px solid var(--admin-border, #E5E7EB);">
+          <span>Total Bayar</span>
+          <span>Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</span>
         </div>
       </div>
+
+      <div style="margin-top: 16px; display: flex; gap: 12px;">
+        <button class="btn-view" style="background: #E0E7FF; color: #4F46E5; padding: 8px 20px; display: flex; align-items: center; gap: 8px;" onclick="printReceipt('${o.id}')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Cetak Resi
+        </button>
+      </div>
+
       ${o.status === 'rejected' ? `<div style="margin-top: 16px; color: #EF4444; background: #FEE2E2; padding: 12px; border-radius: 8px;"><strong>Alasan Ditolak:</strong> ${o.rejectReason || '-'}</div>` : ''}
     `;
 
@@ -169,78 +218,132 @@ async function init() {
     detailModal.style.display = 'flex';
   };
 
-  window.printReceipt = (id) => {
-    const o = allOrdersData.find(order => order.id === id);
-    if (!o) return;
-    
+  // ========== PRINT FUNCTIONS ==========
+
+  function generateReceiptHTML(o) {
+    return `
+      <div class="receipt" style="page-break-after: always; padding: 20px; max-width: 700px; margin: 0 auto;">
+        <div class="header" style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+          <h1 style="margin: 0; font-size: 1.5rem;">REDLINE TRUCK APPAREL</h1>
+          <p style="margin: 5px 0 0 0;">RESI PENGIRIMAN (PACKING SLIP)</p>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+          <div>
+            <strong>Order ID:</strong> ${o.orderNumber}<br>
+            <strong>Tanggal:</strong> ${new Date(o.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br>
+            <strong>Kurir:</strong> ${o.courier.toUpperCase()}
+          </div>
+          <div style="text-align: right;">
+            <strong>Status:</strong> ${o.status.toUpperCase()}<br>
+            <strong>Pembayaran:</strong> ${o.paymentMethod ? o.paymentMethod.toUpperCase() : '-'}
+          </div>
+        </div>
+        
+        <div style="border: 1px solid #000; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+          <h3 style="margin: 0 0 8px 0;">Penerima:</h3>
+          <div style="font-size: 1.2rem; font-weight: bold;">${o.customerName}</div>
+          <div>${o.customerPhone}</div>
+          <div style="margin-top: 10px;">
+            ${o.shippingAddress}<br>
+            ${o.shippingCity}, ${o.shippingProvince}<br>
+            Kode Pos: ${o.shippingZip}
+          </div>
+        </div>
+        
+        <h3>Daftar Barang (Untuk Packing):</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid #000; padding: 8px; text-align: left; background: #f0f0f0;">Produk</th>
+              <th style="border: 1px solid #000; padding: 8px; text-align: left; background: #f0f0f0;">Varian</th>
+              <th style="border: 1px solid #000; padding: 8px; text-align: center; background: #f0f0f0;">Qty</th>
+              <th style="border: 1px solid #000; padding: 8px; text-align: right; background: #f0f0f0;">Harga</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${o.items.map(i => `
+              <tr>
+                <td style="border: 1px solid #000; padding: 8px;"><strong>${i.name}</strong></td>
+                <td style="border: 1px solid #000; padding: 8px;">Warna: ${i.color} | Ukuran: ${i.size}</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: center; font-weight: bold; font-size: 1.2rem;">${i.quantity}</td>
+                <td style="border: 1px solid #000; padding: 8px; text-align: right;">Rp ${new Intl.NumberFormat('id-ID').format(i.price * i.quantity)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" style="border: 1px solid #000; padding: 8px; text-align: right; font-weight: bold;">Total:</td>
+              <td style="border: 1px solid #000; padding: 8px; text-align: right; font-weight: bold; font-size: 1.1rem;">Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+        
+        <div style="margin-top: 40px; text-align: center; font-size: 0.9rem;">
+          Terima kasih telah berbelanja di Redline Truck Apparel.<br>
+          <em>The best or nothing</em>
+        </div>
+      </div>
+    `;
+  }
+
+  function openPrintWindow(receiptsHTML, title) {
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
       <html>
         <head>
-          <title>Resi Pengiriman - ${o.orderNumber}</title>
+          <title>${title}</title>
           <style>
-            body { font-family: sans-serif; line-height: 1.5; padding: 20px; color: #000; }
-            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-            .flex { display: flex; justify-content: space-between; }
-            .box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-            th { background: #f0f0f0; }
-            .print-btn { display: block; width: 100%; padding: 10px; background: #000; color: #fff; text-align: center; text-decoration: none; font-weight: bold; margin-bottom: 20px; cursor: pointer; border: none; }
-            @media print { .print-btn { display: none; } body { padding: 0; } }
+            body { font-family: sans-serif; line-height: 1.5; color: #000; margin: 0; }
+            .print-btn { display: block; width: calc(100% - 40px); max-width: 700px; margin: 20px auto; padding: 12px; background: #111; color: #fff; text-align: center; font-weight: bold; cursor: pointer; border: none; border-radius: 8px; font-size: 1rem; }
+            @media print { .print-btn { display: none; } body { padding: 0; } .receipt { page-break-after: always; } .receipt:last-child { page-break-after: auto; } }
           </style>
         </head>
         <body>
-          <button class="print-btn" onclick="window.print()">CETAK SEKARANG</button>
-          <div class="header">
-            <h1 style="margin: 0;">REDLINE TRUCK APPAREL</h1>
-            <p style="margin: 5px 0 0 0;">RESI PENGIRIMAN (PACKING SLIP)</p>
-          </div>
-          
-          <div class="flex">
-            <div style="flex: 1;">
-              <strong>Order ID:</strong> ${o.orderNumber}<br>
-              <strong>Tanggal:</strong> ${new Date(o.createdAt).toLocaleDateString('id-ID')}<br>
-              <strong>Kurir:</strong> ${o.courier.toUpperCase()}
-            </div>
-          </div>
-          
-          <div class="box" style="margin-top: 20px;">
-            <h3>Penerima:</h3>
-            <div style="font-size: 1.2rem; font-weight: bold;">${o.customerName}</div>
-            <div>${o.customerPhone}</div>
-            <div style="margin-top: 10px;">
-              ${o.shippingAddress}<br>
-              ${o.shippingCity}, ${o.shippingProvince}<br>
-              Kode Pos: ${o.shippingZip}
-            </div>
-          </div>
-          
-          <h3>Daftar Barang (Untuk Packing):</h3>
-          <table>
-            <thead>
-              <tr><th>Produk</th><th>Varian</th><th>Qty</th></tr>
-            </thead>
-            <tbody>
-              ${o.items.map(i => `
-                <tr>
-                  <td><strong>${i.name}</strong></td>
-                  <td>Warna: ${i.color} | Ukuran: ${i.size}</td>
-                  <td style="text-align: center; font-weight: bold; font-size: 1.2rem;">${i.quantity}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-          
-          <div style="margin-top: 40px; text-align: center; font-size: 0.9rem;">
-            Terima kasih telah berbelanja di Redline Truck Apparel.<br>
-            <em>The best or nothing</em>
-          </div>
+          <button class="print-btn" onclick="window.print()">🖨️ CETAK SEKARANG</button>
+          ${receiptsHTML}
         </body>
       </html>
     `);
     printWindow.document.close();
+  }
+
+  window.printReceipt = (id) => {
+    const o = allOrdersData.find(order => order.id === id);
+    if (!o) return;
+    openPrintWindow(generateReceiptHTML(o), `Resi - ${o.orderNumber}`);
   };
+
+  // Print selected receipts (checkbox)
+  window.printSelectedReceipts = () => {
+    const checkboxes = document.querySelectorAll('.order-checkbox:checked');
+    if (checkboxes.length === 0) {
+      alert('Pilih minimal 1 pesanan untuk dicetak.');
+      return;
+    }
+    const selectedIds = Array.from(checkboxes).map(cb => cb.dataset.orderId);
+    const selectedOrders = allOrdersData.filter(o => selectedIds.includes(o.id));
+    const receipts = selectedOrders.map(o => generateReceiptHTML(o)).join('');
+    openPrintWindow(receipts, `Resi Terpilih (${selectedOrders.length})`);
+  };
+
+  // Print all confirmed receipts
+  window.printAllReceipts = () => {
+    const confirmedOrders = allOrdersData.filter(o => ['processing', 'shipped', 'completed'].includes(o.status));
+    if (confirmedOrders.length === 0) {
+      alert('Tidak ada pesanan terkonfirmasi untuk dicetak.');
+      return;
+    }
+    const receipts = confirmedOrders.map(o => generateReceiptHTML(o)).join('');
+    openPrintWindow(receipts, `Semua Resi (${confirmedOrders.length})`);
+  };
+
+  // Select all checkbox
+  window.toggleSelectAll = (checked) => {
+    document.querySelectorAll('.order-checkbox').forEach(cb => cb.checked = checked);
+  };
+
+  // ========== EXPORT EXCEL ==========
 
   document.getElementById('btn-export-excel')?.addEventListener('click', () => {
     if (typeof XLSX === 'undefined') {

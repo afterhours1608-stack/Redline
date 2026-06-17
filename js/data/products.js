@@ -24,6 +24,24 @@ export async function fetchAllProducts() {
         else badgeType = 'new';
       }
 
+      // Calculate variant prices map: { "size-color": price }
+      const variantPrices = {};
+      const variantPricesBySize = {};
+      p.variants.forEach(v => {
+        const key = `${v.size}-${v.color}`;
+        variantPrices[key] = v.price != null ? v.price : p.price;
+        // Track price per size (for display)
+        if (!variantPricesBySize[v.size]) {
+          variantPricesBySize[v.size] = v.price != null ? v.price : p.price;
+        }
+      });
+
+      // Calculate min/max price from all variants
+      const allPrices = p.variants.map(v => v.price != null ? v.price : p.price);
+      const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : p.price;
+      const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : p.price;
+      const hasVariantPricing = minPrice !== maxPrice;
+
       return {
         ...p,
         badge: badgeType,
@@ -36,7 +54,14 @@ export async function fetchAllProducts() {
         images: Array.isArray(p.images) ? p.images.filter(img => img).map(img => img.startsWith('http') ? img : `${img}`) : [],
         frontImage: Array.isArray(p.images) && p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : '' + p.images[0]) : '',
         backImage: Array.isArray(p.images) && p.images[1] ? (p.images[1].startsWith('http') ? p.images[1] : '' + p.images[1]) : (Array.isArray(p.images) && p.images[0] ? (p.images[0].startsWith('http') ? p.images[0] : '' + p.images[0]) : ''),
-        reviews: []
+        reviews: [],
+        // Pricing
+        minPrice,
+        maxPrice,
+        hasVariantPricing,
+        variantPrices,        // { "S-Hitam": 150000, "M-Hitam": 175000, ... }
+        variantPricesBySize,  // { "S": 150000, "M": 175000, ... }
+        displayPrice: minPrice, // Show lowest price by default
       };
     });
     return cachedProducts;
