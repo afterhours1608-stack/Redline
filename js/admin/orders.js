@@ -78,6 +78,9 @@ async function init() {
               </select>
             </td>
             <td>
+              <div style="font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; color: ${o.paymentMethod.toLowerCase().includes('cod') ? '#059669' : '#4F46E5'};">
+                ${o.paymentMethod.toUpperCase()}
+              </div>
               <button class="btn-view" onclick="openDetailModal('${o.id}')">Detail</button>
             </td>
           </tr>
@@ -116,7 +119,7 @@ async function init() {
     e.preventDefault();
     const id = document.getElementById('reject-order-id').value;
     const reason = document.getElementById('reject-reason').value;
-    updateStatus(id, 'rejected', reason);
+    window.updateStatus(id, 'rejected', reason);
     rejectModal.style.display = 'none';
   });
 
