@@ -8,6 +8,8 @@ import categoriesRoutes from './routes/categories.js';
 import ordersRoutes from './routes/orders.js';
 import dashboardRoutes from './routes/dashboard.js';
 import usersRoutes from './routes/users.js';
+import adminRoutes from './routes/admin.js';
+import paymentRoutes from './routes/payments.js';
 
 import prisma from './prismaClient.js';
 const app = express();
@@ -27,6 +29,8 @@ app.use('/api/categories', categoriesRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/payments', paymentRoutes);
 
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   const PORT = process.env.PORT || 5000;

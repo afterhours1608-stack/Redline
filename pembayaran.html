@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembayaran - REDLINE Truck Apparel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <style>
+    .payment-layout {
+      max-width: 600px;
+      margin: var(--space-12) auto;
+      padding: var(--space-6);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .payment-header {
+      text-align: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px dashed var(--color-border);
+    }
+    .payment-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin: var(--space-2) 0;
+    }
+    .payment-instructions {
+      background: var(--color-background);
+      padding: var(--space-4);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-6);
+      text-align: center;
+    }
+    .payment-account {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin: var(--space-2) 0;
+    }
+    .upload-box {
+      border: 2px dashed var(--color-border);
+      padding: var(--space-6);
+      text-align: center;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-box:hover {
+      border-color: var(--color-primary);
+      background: rgba(0, 0, 0, 0.02);
+    }
+    .upload-box img {
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: var(--radius-sm);
+      margin-top: var(--space-4);
+      display: none;
+    }
+    #upload-file { display: none; }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      background: #FEF3C7;
+      color: #D97706;
+    }
+    .status-badge.success {
+      background: #D1FAE5;
+      color: #059669;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Minimal for Payment -->
+  <header style="padding: var(--space-4); border-bottom: 1px solid var(--color-border); display: flex; justify-content: center;">
+    <a href="/" style="display: flex; align-items: center; gap: var(--space-2); text-decoration: none; color: var(--color-text);">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span style="font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.25rem; letter-spacing: 1px;">REDLINE</span>
+    </a>
+  </header>
+
+  <main class="container">
+    <div class="payment-layout" id="payment-content">
+      <div style="text-align: center; padding: var(--space-12);">
+        <p>Memuat data pesanan...</p>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/pages/payment.js"></script>
+</body>
+</html>

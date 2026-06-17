@@ -205,7 +205,7 @@ function renderStep1() {
   });
 }
 
-function renderStep2() {
+async function renderStep2() {
   const main = document.getElementById('checkout-main');
   currentStep = 2;
 
@@ -213,70 +213,90 @@ function renderStep2() {
     ${renderSteps()}
     <div class="checkout-section">
       <h3 class="checkout-section__title">Metode Pembayaran</h3>
-
-      <div class="payment-group">
-        <div class="payment-group__title">QRIS (Scan QR)</div>
-        <div class="payment-options">
-          <label class="payment-option selected">
-            <input type="radio" name="payment" value="qris" checked /> QRIS
-          </label>
-        </div>
-      </div>
-
-      <div class="payment-group">
-        <div class="payment-group__title">Virtual Account</div>
-        <div class="payment-options">
-          <label class="payment-option"><input type="radio" name="payment" value="bca" /> BCA VA</label>
-          <label class="payment-option"><input type="radio" name="payment" value="mandiri" /> Mandiri VA</label>
-          <label class="payment-option"><input type="radio" name="payment" value="bni" /> BNI VA</label>
-          <label class="payment-option"><input type="radio" name="payment" value="bri" /> BRI VA</label>
-        </div>
-      </div>
-
-      <div class="payment-group">
-        <div class="payment-group__title">E-Wallet</div>
-        <div class="payment-options">
-          <label class="payment-option"><input type="radio" name="payment" value="gopay" /> GoPay</label>
-          <label class="payment-option"><input type="radio" name="payment" value="ovo" /> OVO</label>
-          <label class="payment-option"><input type="radio" name="payment" value="dana" /> Dana</label>
-          <label class="payment-option"><input type="radio" name="payment" value="shopeepay" /> ShopeePay</label>
-        </div>
-      </div>
-
-      <div class="payment-group">
-        <div class="payment-group__title">Transfer Manual</div>
-        <div class="payment-options">
-          <label class="payment-option"><input type="radio" name="payment" value="tf-bca" /> Transfer BCA</label>
-          <label class="payment-option"><input type="radio" name="payment" value="tf-mandiri" /> Transfer Mandiri</label>
-        </div>
-      </div>
-
-      <div class="payment-group">
-        <div class="payment-group__title">Bayar di Tempat</div>
-        <div class="payment-options">
-          <label class="payment-option"><input type="radio" name="payment" value="cod" /> Cash on Delivery (COD)</label>
-        </div>
+      <div id="payment-options-container">
+        <p>Memuat metode pembayaran...</p>
       </div>
     </div>
-
     <div class="checkout-main-actions">
       <button class="btn btn--outline btn--lg" id="step2-back">← Kembali</button>
       <button class="btn btn--primary btn--lg" id="step2-next">Review Pesanan</button>
     </div>
   `;
 
-  // Payment selection
-  const paymentOptions = main.querySelectorAll('.payment-option');
-  paymentOptions.forEach(opt => {
-    opt.addEventListener('click', () => {
-      paymentOptions.forEach(o => o.classList.remove('selected'));
-      opt.classList.add('selected');
-      selectedPayment = opt.querySelector('input').value;
-    });
-  });
+  let payments = [];
+  try {
+    const res = await fetch('/api/payments');
+    payments = await res.json();
+  } catch (err) {
+    console.error(err);
+  }
 
-  main.querySelector('#step2-back')?.addEventListener('click', () => renderStep1());
-  main.querySelector('#step2-next')?.addEventListener('click', () => renderStep3());
+  const container = document.getElementById('payment-options-container');
+  if (!payments || payments.length === 0) {
+    container.innerHTML = '<p style="color: red;">Gagal memuat metode pembayaran.</p>';
+  } else {
+    // Group payments
+    const groups = {
+      qris: { title: 'QRIS (Scan QR)', items: [] },
+      bank: { title: 'Transfer Bank', items: [] },
+      ewallet: { title: 'E-Wallet', items: [] },
+      cod: { title: 'Bayar di Tempat', items: [] }
+    };
+    payments.forEach(p => {
+      if (groups[p.type]) groups[p.type].items.push(p);
+    });
+
+    let html = '';
+    let firstActiveId = null;
+
+    Object.keys(groups).forEach(key => {
+      const g = groups[key];
+      if (g.items.length > 0) {
+        html += `<div class="payment-group">
+          <div class="payment-group__title">${g.title}</div>
+          <div class="payment-options">`;
+        
+        g.items.forEach(p => {
+          if (p.isActive && !firstActiveId) firstActiveId = p.id;
+          const disabledStyle = !p.isActive ? 'opacity: 0.5; text-decoration: line-through; cursor: not-allowed;' : '';
+          
+          html += `
+            <label class="payment-option ${p.isActive ? '' : 'inactive'}" style="${disabledStyle}" ${!p.isActive ? `onclick="event.preventDefault(); alert('Metode pembayaran ini belum tersedia / sedang gangguan.');"` : ''}>
+              <input type="radio" name="payment" value="${p.id}" ${!p.isActive ? 'disabled' : ''} ${firstActiveId === p.id ? 'checked' : ''} /> ${p.name}
+            </label>
+          `;
+        });
+        
+        html += `</div></div>`;
+      }
+    });
+    
+    container.innerHTML = html;
+
+    if (firstActiveId) {
+      orderForm.paymentMethod = payments.find(p => p.id === firstActiveId).name;
+    }
+
+    const radios = document.querySelectorAll('input[name="payment"]');
+    radios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        document.querySelectorAll('.payment-option').forEach(l => l.classList.remove('selected'));
+        if (e.target.checked) {
+          e.target.closest('.payment-option').classList.add('selected');
+          orderForm.paymentMethod = payments.find(p => p.id === e.target.value).name;
+        }
+      });
+    });
+    
+    // Select the first active radio
+    const activeRadio = document.querySelector('input[name="payment"]:checked');
+    if (activeRadio) {
+      activeRadio.closest('.payment-option').classList.add('selected');
+    }
+  }
+
+  document.getElementById('step2-back')?.addEventListener('click', renderStep1);
+  document.getElementById('step2-next')?.addEventListener('click', renderStep3);
 }
 
 function renderStep3() {
@@ -366,6 +386,15 @@ async function placeOrder() {
     
     if (data.success) {
       clearCart();
+      const isCOD = orderForm.paymentMethod.toLowerCase().includes('cod');
+      
+      if (!isCOD) {
+        // Redirect to payment upload page
+        window.location.href = '/pembayaran.html?order=' + data.orderNumber;
+        return;
+      }
+
+      // COD Success Flow
       const container = document.getElementById('checkout-container');
       container.innerHTML = `
         <div class="checkout-success">
@@ -375,9 +404,9 @@ async function placeOrder() {
             </svg>
           </div>
           <h2 style="margin-bottom: var(--space-2);">Pesanan Berhasil!</h2>
-          <p class="text-secondary" style="margin-bottom: var(--space-4);">Terima kasih atas pesanan Anda. Email konfirmasi telah dikirim.</p>
+          <p class="text-secondary" style="margin-bottom: var(--space-4);">Terima kasih atas pesanan Anda. Pesanan COD akan segera diproses.</p>
           <div class="checkout-success__order-id">${data.orderNumber}</div>
-          <p class="text-secondary text-sm" style="margin-bottom: var(--space-8);">Silakan selesaikan pembayaran dalam 24 jam untuk memproses pesanan Anda.</p>
+          <p class="text-secondary text-sm" style="margin-bottom: var(--space-8);">Siapkan uang pas sejumlah <strong>${formatRupiah(total)}</strong> untuk kurir.</p>
           <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
             <a href="/katalog.html" class="btn btn--primary">Lanjut Belanja</a>
             <a href="/" class="btn btn--outline">Kembali ke Home</a>

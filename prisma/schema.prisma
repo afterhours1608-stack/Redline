@@ -73,6 +73,7 @@ model Order {
   shippingZip      String
   courier          String
   paymentMethod    String
+  paymentProof     String?     // URL to uploaded payment proof image
   subtotal         Float
   shippingCost     Float
   discount         Float       @default(0)
@@ -111,4 +112,13 @@ model FlashSale {
   isActive  Boolean   @default(false)
   endTime   DateTime?
   title     String    @default("Flash Sale")
+}
+
+model PaymentMethod {
+  id            String  @id
+  type          String  // "bank", "ewallet", "qris", "cod"
+  name          String
+  accountNumber String?
+  accountName   String?
+  isActive      Boolean @default(false)
 }

@@ -37,10 +37,13 @@ async function init() {
               </div>`).join('')}
             </td>
             <td>${new Date(o.createdAt).toLocaleDateString('id-ID')}</td>
-            <td>Rp ${new Intl.NumberFormat('id-ID').format(o.total)}</td>
+            <td>
+              Rp ${new Intl.NumberFormat('id-ID').format(o.total)}<br>
+              <small style="color: ${o.paymentMethod.toLowerCase().includes('cod') ? '#059669' : (o.paymentProof ? '#059669' : '#D97706')}">${o.paymentMethod.toLowerCase().includes('cod') ? 'COD' : (o.paymentProof ? 'Bukti Ada' : 'Belum Bayar')}</small>
+            </td>
             <td>
               <div style="display: flex; gap: 8px;">
-                <button class="btn-view" style="background: #D1FAE5; color: #059669;" onclick="updateStatus('${o.id}', 'processing')">Terima</button>
+                <button class="btn-view" style="background: ${(!o.paymentMethod.toLowerCase().includes('cod') && !o.paymentProof) ? '#E5E7EB' : '#D1FAE5'}; color: ${(!o.paymentMethod.toLowerCase().includes('cod') && !o.paymentProof) ? '#9CA3AF' : '#059669'};" onclick="${(!o.paymentMethod.toLowerCase().includes('cod') && !o.paymentProof) ? `alert('Tunggu customer upload bukti transfer dulu!');` : `updateStatus('${o.id}', 'processing')`}">${(!o.paymentMethod.toLowerCase().includes('cod') && !o.paymentProof) ? 'Tunggu Bukti' : 'Terima'}</button>
                 <button class="btn-view" style="background: #FEE2E2; color: #EF4444;" onclick="openRejectModal('${o.id}')">Tolak</button>
                 <button class="btn-view" onclick="openDetailModal('${o.id}')">Detail</button>
               </div>
@@ -212,6 +215,20 @@ async function init() {
       </div>
 
       ${o.status === 'rejected' ? `<div style="margin-top: 16px; color: #EF4444; background: #FEE2E2; padding: 12px; border-radius: 8px;"><strong>Alasan Ditolak:</strong> ${o.rejectReason || '-'}</div>` : ''}
+
+      ${o.paymentProof ? `
+        <div style="margin-top: 24px; border-top: 1px solid var(--admin-border, #E5E7EB); padding-top: 16px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #9CA3AF; margin-bottom: 12px; font-weight: 700;">Bukti Pembayaran</div>
+          <a href="${o.paymentProof}" target="_blank">
+            <img src="${o.paymentProof}" alt="Bukti TF" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #E5E7EB; cursor: zoom-in;" />
+          </a>
+        </div>
+      ` : (!o.paymentMethod.toLowerCase().includes('cod') ? `
+        <div style="margin-top: 24px; border-top: 1px solid var(--admin-border, #E5E7EB); padding-top: 16px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #9CA3AF; margin-bottom: 12px; font-weight: 700;">Bukti Pembayaran</div>
+          <div style="padding: 12px; background: #FEF3C7; color: #D97706; border-radius: 8px; font-size: 0.9rem;">Customer belum mengunggah bukti pembayaran.</div>
+        </div>
+      ` : '')}
     `;
 
     document.getElementById('detail-content').innerHTML = content;
