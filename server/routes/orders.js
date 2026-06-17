@@ -3,16 +3,14 @@ import prisma from '../prismaClient.js';
 import { requireAdmin } from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
-import { createClient } from '@supabase/supabase-js';
 
 const router = express.Router();
 
-const supabaseUrl = process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY || 'placeholder';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
 // CREATE Order (Public - Checkout)
 router.post('/', async (req, res) => {
@@ -99,32 +97,20 @@ router.post('/:orderNumber/upload-proof', upload.single('image'), async (req, re
     const order = await prisma.order.findUnique({ where: { orderNumber } });
     if (!order) return res.status(404).json({ error: 'Pesanan tidak ditemukan' });
 
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const fileName = 'payment-' + orderNumber + '-' + uniqueSuffix + path.extname(req.file.originalname);
-    
-    const { data, error } = await supabase.storage
-      .from('redline-storage')
-      .upload('payments/' + fileName, req.file.buffer, {
-        contentType: req.file.mimetype,
-        upsert: false
-      });
-      
-    if (error) throw error;
-    
-    const { data: { publicUrl } } = supabase.storage
-      .from('redline-storage')
-      .getPublicUrl('payments/' + fileName);
+    // Convert file buffer to base64 Data URI
+    const base64Str = req.file.buffer.toString('base64');
+    const dataUri = `data:${req.file.mimetype};base64,${base64Str}`;
       
     // Update order with payment proof
     const updatedOrder = await prisma.order.update({
       where: { orderNumber },
-      data: { paymentProof: publicUrl }
+      data: { paymentProof: dataUri }
     });
 
-    res.json({ success: true, url: publicUrl, order: updatedOrder });
+    res.json({ success: true, url: dataUri, order: updatedOrder });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to upload to Supabase' });
+    res.status(500).json({ error: 'Gagal mengunggah foto ke server. Pastikan ukuran di bawah 5MB.' });
   }
 });
 
