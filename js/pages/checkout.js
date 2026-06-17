@@ -533,17 +533,17 @@ function showPaymentModal(orderNumber, total, paymentName) {
     btnSubmit.textContent = 'MENGUNGGAH...';
 
     const formData = new FormData();
-    formData.append('proof', selectedFile);
+    formData.append('image', selectedFile);
 
     try {
-      const res = await fetch(\`/api/orders/\${orderNumber}/upload-proof\`, {
+      const res = await fetch(`/api/orders/${orderNumber}/upload-proof`, {
         method: 'POST',
         body: formData
       });
       const data = await res.json();
       
       if (data.success) {
-        document.querySelector('.payment-modal__body').innerHTML = \`
+        document.querySelector('.payment-modal__body').innerHTML = `
           <div style="text-align: center; padding: 32px 0;">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="margin: 0 auto 16px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: #111;">Bukti Berhasil Diunggah!</h3>
@@ -553,7 +553,7 @@ function showPaymentModal(orderNumber, total, paymentName) {
               <a href="/" class="btn btn--outline btn--full">KEMBALI KE HOME</a>
             </div>
           </div>
-        \`;
+        `;
       } else {
         alert('Gagal mengunggah: ' + (data.error || 'Terjadi kesalahan'));
         btnSubmit.disabled = false;
