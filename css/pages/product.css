@@ -7,6 +7,7 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--space-12);
   padding: var(--space-4) 0 var(--space-16);
+  max-width: 100%;
 }
 
 @media (max-width: 1024px) {
@@ -21,6 +22,7 @@
   position: sticky;
   top: 80px;
   align-self: start;
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
@@ -80,6 +82,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  min-width: 0;
 }
 
 .pdp-info__badges {
