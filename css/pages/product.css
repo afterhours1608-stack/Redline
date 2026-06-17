@@ -404,6 +404,7 @@
 
   .size-options {
     gap: var(--space-1);
+    flex-wrap: wrap !important;
   }
 
   .size-option {

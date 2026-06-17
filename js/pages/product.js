@@ -129,8 +129,8 @@ function renderProduct(product) {
         <h1 class="pdp-info__name">${product.name}</h1>
 
         <div class="pdp-info__rating">
-          <div class="stars">${generateStars(product.rating)}</div>
-          <span class="pdp-info__rating-text">${product.rating} (${product.reviewCount} ulasan)</span>
+          <div class="stars">${generateStars(product.rating || 5)}</div>
+          <span class="pdp-info__rating-text">${product.rating || 5.0} (${product.reviewCount || 0} ulasan)</span>
         </div>
 
         <div class="pdp-info__price">
@@ -276,13 +276,93 @@ function initGallery(product) {
     });
   });
 
-  // Zoom on hover
-  mainWrap?.addEventListener('mousemove', (e) => {
-    const rect = mainWrap.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    mainImg.style.transformOrigin = `${x}% ${y}%`;
+  setupImageZoomPan(mainWrap, mainImg);
+}
+
+function setupImageZoomPan(container, img) {
+  if (!container || !img) return;
+
+  let currentScale = 1;
+  let currentX = 0;
+  let currentY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let lastDist = 0;
+  let lastTap = 0;
+
+  // Add CSS transition for smooth scaling/panning except when dragging
+  img.style.transition = 'transform 0.3s ease';
+
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      lastDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+    } else if (e.touches.length === 1) {
+      const now = new Date().getTime();
+      const timeSince = now - lastTap;
+      if (timeSince < 300 && timeSince > 0) {
+        // Double tap
+        e.preventDefault();
+        currentScale = currentScale > 1 ? 1 : 2;
+        currentX = 0;
+        currentY = 0;
+        updateTransform();
+      }
+      lastTap = now;
+
+      if (currentScale > 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - currentX;
+        startY = e.touches[0].clientY - currentY;
+      }
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const scaleDelta = dist / lastDist;
+      currentScale = Math.min(Math.max(1, currentScale * scaleDelta), 4);
+      lastDist = dist;
+      if (currentScale === 1) {
+        currentX = 0;
+        currentY = 0;
+      }
+      updateTransform(true);
+    } else if (e.touches.length === 1 && isDragging && currentScale > 1) {
+      e.preventDefault();
+      currentX = e.touches[0].clientX - startX;
+      currentY = e.touches[0].clientY - startY;
+      
+      const boundX = (container.clientWidth * currentScale - container.clientWidth) / 2;
+      const boundY = (container.clientHeight * currentScale - container.clientHeight) / 2;
+      currentX = Math.min(Math.max(currentX, -boundX), boundX);
+      currentY = Math.min(Math.max(currentY, -boundY), boundY);
+      
+      updateTransform(true);
+    }
+  }, { passive: false });
+
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length < 2) lastDist = 0;
+    if (e.touches.length === 0) {
+      isDragging = false;
+      updateTransform();
+    }
   });
+
+  function updateTransform(instant = false) {
+    img.style.transition = instant ? 'none' : 'transform 0.3s ease';
+    img.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+  }
 }
 
 function initSizeOptions(product) {
